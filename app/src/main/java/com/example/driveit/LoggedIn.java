@@ -32,7 +32,11 @@ public class LoggedIn extends AppCompatActivity {
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                editor.
+                editor.putString("email", "");
+                editor.putString("password", "");
+                editor.putBoolean("isConnected", false);
+                editor.commit();
+                finish();
             }
         });
     }

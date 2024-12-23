@@ -25,7 +25,10 @@ public class InputCheckSystem {
             createErrorDialog(context, "You must enter a legal email address!");
             return false;
         }
-        // TODO add password check system. if else statement
+        else if(!checkPwdField(context, passwordField)){
+            createErrorDialog(context, "Enter a password which al least 8 characters long, and the fist character is a capital letter");
+            return false;
+        }
         return true;
     }
 
@@ -62,14 +65,20 @@ public class InputCheckSystem {
 
     public static boolean checkNameField(Context context, EditText nameField){
         String name = nameField.getText().toString();
-        for(int i = 0; i<name.length(); i++){
-            int asciiVal = (int)name.charAt(i);
-            if(!(asciiVal > 65 && asciiVal < 90) && !(asciiVal > 97 && asciiVal < 122)){
+        String regex = "^[A-Za-z]{2,29}$";
+        if(name.matches(regex)){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkPwdField(Context context, EditText pwdField){
+        String pwd = pwdField.getText().toString();
+        String regex = "^[A-Za-z0-9!_]{4,}$";
+        if((int)pwd.charAt(0) > 90 || (int)pwd.charAt(0) < 65){
+            if(!pwd.matches(regex)){
                 return false;
             }
-        }
-        if(nameField.getText().length() < 2){
-            return false;
         }
         return true;
     }
