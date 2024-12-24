@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class RegisterFragment extends Fragment {
-    Button conBtnReg, updateBtnReg;
+    Button conBtnReg;
     EditText usernameEtReg, emailEtReg, pwdEtReg, phoneEtReg;
     ImageView ivReg;
 
@@ -41,10 +41,6 @@ public class RegisterFragment extends Fragment {
     ActivityResultLauncher<Intent> arlPhoto;
     ActivityResultLauncher<String> arlGallery;
 
-    User oldUser, userToUpdate;
-
-    String flagActivity="register";
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,53 +50,6 @@ public class RegisterFragment extends Fragment {
         init(view);
         // permissions
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        Intent intent=getActivity().getIntent();
-        flagActivity = intent.getStringExtra("flagActivity");
-        if(intent.hasExtra("flagActivity")&&flagActivity.equals("login")){
-            if (intent.hasExtra("user")){
-                oldUser=(User)intent.getSerializableExtra("user");
-                Bitmap oldImage = mydb.getPicture(intent.getByteArrayExtra("image"));
-                oldUser.setImage(oldImage);
-                if(oldUser!=null){
-                    conBtnReg.setEnabled(false);
-                    usernameEtReg.setText(oldUser.getUsername());
-                    usernameEtReg.setEnabled(false);
-                    pwdEtReg.setText(oldUser.getPassword());
-                    pwdEtReg.setEnabled(false);
-                    emailEtReg.setText(oldUser.getEmail());
-                    phoneEtReg.setText(oldUser.getPhone());
-                    ivReg.setImageBitmap(oldUser.getImage());
-                }
-            }
-        }
-        updateBtnReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                info[0]=usernameEtReg.getText().toString();
-                info[1]=pwdEtReg.getText().toString();
-                info[2]=emailEtReg.getText().toString();
-                info[3]=phoneEtReg.getText().toString();
-                image=((BitmapDrawable)ivReg.getDrawable()).getBitmap();
-                userToUpdate=new User(info[0],info[1],info[2],info[3],image);
-
-                if(!info[0].equals("")&&!info[1].equals("")&&!info[2].equals("")&&!info[3].equals("")) {
-                    //TODO check inputs
-                    sqdb = mydb.getWritableDatabase();
-                    if(mydb.userExists(userToUpdate.getUsername(),userToUpdate.getPassword()))
-                        mydb.updateUser(oldUser,userToUpdate);
-                    else
-                        Toast.makeText(getActivity(),"User already exists!!!", Toast.LENGTH_SHORT).show();
-                    sqdb.close();
-                }
-                else
-                    Toast.makeText(getActivity(),"Fill all fields!!!", Toast.LENGTH_SHORT).show();
-                usernameEtReg.setText("");
-                pwdEtReg.setText("");
-                emailEtReg.setText("");
-                phoneEtReg.setText("");
-                getActivity().finish();
-            }
-        });
         arlPhoto = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -176,7 +125,6 @@ public class RegisterFragment extends Fragment {
 
     public void init(View view){
         conBtnReg = view.findViewById(R.id.conBtnReg);
-        updateBtnReg = view.findViewById(R.id.updateBtnReg);
         usernameEtReg = view.findViewById(R.id.usernameEtReg);
         emailEtReg = view.findViewById(R.id.emailEtReg);
         pwdEtReg = view.findViewById(R.id.pwdEtReg);
