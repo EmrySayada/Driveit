@@ -27,6 +27,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String EMAIL="email";
     public static final String PICTURE="picture";
 
+    public static final String ISTEACHER="isteacher";
+
     //TODO add variables to another sql table
 
     private String SQL_Create = "";
@@ -44,7 +46,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Create+=PASSWORD+" TEXT, ";
         SQL_Create+=EMAIL+" TEXT, ";
         SQL_Create+=PHONE+" TEXT, ";
-        SQL_Create+=PICTURE+" BLOB);";
+        SQL_Create+=PICTURE+" BLOB, ";
+        SQL_Create+=ISTEACHER+" INTEGER);";
         db.execSQL(SQL_Create);
 
         // TODO create another table
@@ -76,8 +79,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(PASSWORD, user.getPassword());
         cv.put(EMAIL, user.getEmail());
         cv.put(PHONE, user.getPhone());
-
         cv.put(PICTURE, getBytes(user.getImage()));
+        cv.put(ISTEACHER, user.getIsTeacher());
         sqdb.insert(TABLE_NAME, null, cv);
         sqdb.close();
     }
@@ -111,6 +114,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int col3=c.getColumnIndex(EMAIL);
         int col4=c.getColumnIndex(PHONE);
         int col5=c.getColumnIndex(PICTURE);
+        int col6=c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
         while(!c.isAfterLast()){
             String s1 = c.getString(col1);
@@ -118,7 +122,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String s3 = c.getString(col3);
             String s4 = c.getString(col4);
             Bitmap image = getPicture(c.getBlob(col5));
-            user = new User(s1, s2, s3, s4, image);
+            int s6 = c.getInt(col6);
+            user = new User(s1, s2, s3, s4, image, s6);
             c.moveToNext();
         }
         sqdb.close();
@@ -136,6 +141,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int col3=c.getColumnIndex(EMAIL);
         int col4=c.getColumnIndex(PHONE);
         int col5=c.getColumnIndex(PICTURE);
+        int col6 = c.getColumnIndex(ISTEACHER);
         c.moveToNext();
         while(!c.isAfterLast()){
             String s1 = c.getString(col1);
@@ -143,7 +149,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String s3 = c.getString(col3);
             String s4 = c.getString(col4);
             Bitmap image=getPicture(c.getBlob(col5));
-            User user = new User(s1,s2,s3,s4,image);
+            int s6 = c.getInt(col6);
+            User user = new User(s1,s2,s3,s4,image, s6);
             arrUsers.add(user);
             c.moveToNext();
         }
@@ -167,5 +174,36 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(PICTURE, getBytes(newUser.getImage()));
         sqdb.update(TABLE_NAME, cv, USERNAME+"=? AND "+PASSWORD+"=?", new String[]{oldUser.getUsername(), oldUser.getPassword()});
         sqdb.close();
+    }
+
+    public boolean isTeacherInDB(String email, String password){
+        Cursor c;
+        User user = null;
+        sqdb=getWritableDatabase();
+        c=sqdb.query(TABLE_NAME, null, EMAIL+"=? AND "+PASSWORD+"=?", new String[]{email,password}, null, null, null);
+        int col1=c.getColumnIndex(USERNAME);
+        int col2=c.getColumnIndex(PASSWORD);
+        int col3=c.getColumnIndex(EMAIL);
+        int col4=c.getColumnIndex(PHONE);
+        int col5=c.getColumnIndex(PICTURE);
+        int col6=c.getColumnIndex(ISTEACHER);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            String s1 = c.getString(col1);
+            String s2 = c.getString(col2);
+            String s3 = c.getString(col3);
+            String s4 = c.getString(col4);
+            Bitmap image = getPicture(c.getBlob(col5));
+            int s6 = c.getInt(col6);
+            user = new User(s1, s2, s3, s4, image, s6);
+            c.moveToNext();
+        }
+        sqdb.close();
+        if(user!=null){
+            if(user.getIsTeacher()==1){
+                return true;
+            }
+        }
+        return false;
     }
 }

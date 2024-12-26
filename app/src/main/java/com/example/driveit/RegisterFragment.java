@@ -26,10 +26,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 public class RegisterFragment extends Fragment {
     Button conBtnReg;
+    RadioButton isTeacherBtn;
     EditText usernameEtReg, emailEtReg, pwdEtReg, phoneEtReg;
     ImageView ivReg;
 
@@ -80,7 +82,11 @@ public class RegisterFragment extends Fragment {
                     info[2]=emailEtReg.getText().toString();
                     info[3]=phoneEtReg.getText().toString();
                     image=((BitmapDrawable)ivReg.getDrawable()).getBitmap();
-                    user=new User(info[0], info[1], info[2], info[3], image);
+                    int isTeacher = 0;
+                    if(isTeacherBtn.isChecked()){
+                        isTeacher = 1;
+                    }
+                    user=new User(info[0], info[1], info[2], info[3], image, isTeacher);
                     sqdb = mydb.getWritableDatabase();
                     if(!mydb.userExists(user.getUsername(),user.getPassword()))
                         mydb.insert(user);
@@ -130,6 +136,7 @@ public class RegisterFragment extends Fragment {
         pwdEtReg = view.findViewById(R.id.pwdEtReg);
         phoneEtReg = view.findViewById(R.id.phoneEtReg);
         ivReg = view.findViewById(R.id.ivReg);
+        isTeacherBtn = view.findViewById(R.id.isTeacherBtn);
         info = new String[4];
         mydb = new DBHelper(getActivity());
     }

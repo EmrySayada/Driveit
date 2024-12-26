@@ -37,8 +37,7 @@ public class LoginFragment extends Fragment {
         if(conn){
             Toast.makeText(getActivity(), "You are already logged in!", Toast.LENGTH_SHORT).show();
             // user already logged in move it to the next page
-            Intent intent = new Intent(getActivity(), LoggedIn.class);
-            startActivity(intent);
+            transfetUserAfterLogin(sp.getBoolean("isTeacher", false));
         }
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,13 +47,14 @@ public class LoginFragment extends Fragment {
                     String password = etPasswordLogin.getText().toString();
 
                     sqdb = mydb.getWritableDatabase();
+                    boolean isTeacher = mydb.isTeacherInDB(email, password);
                     if(mydb.userExists(email, password)){
                         editor.putString("email", email);
                         editor.putString("password", password);
+                        editor.putBoolean("isTeacher", isTeacher);
                         editor.putBoolean("isConnected", true);
                         editor.commit();
-                        Intent intent = new Intent(getActivity(), LoggedIn.class);
-                        startActivity(intent);
+                        transfetUserAfterLogin(isTeacher);
                     }else{
                         Toast.makeText(getActivity(), "Incorrect credentials", Toast.LENGTH_SHORT).show();
                     }
@@ -74,5 +74,15 @@ public class LoginFragment extends Fragment {
         sqdb = mydb.getWritableDatabase();
 
         sqdb.close();
+    }
+
+    public void transfetUserAfterLogin(boolean isTeacher){
+        if(isTeacher){
+            Intent intent = new Intent(getActivity(), TeacherActivity.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getActivity(), PupilActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -10,13 +10,15 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private Bitmap image;
+    private int isTeacher;
 
-    public User(String username, String password, String email, String phone, Bitmap image){
+    public User(String username, String password, String email, String phone, Bitmap image, int isTeacher){
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
         this.image = image;
+        this.isTeacher = isTeacher;
     }
 
     public String getUsername() {
@@ -59,12 +61,21 @@ public class User implements Serializable {
         this.image = image;
     }
 
+    public int getIsTeacher(){
+        return this.isTeacher;
+    }
+
+    public void setIsTeacher(int isTeacher){
+        this.isTeacher = isTeacher;
+    }
+
     @Override
     public String toString(){
         return "username= " + username +
                 "\npassword= " + password+
                 "\nphone= " + phone +
                 "\nemail= " + email +
-                "\nimage= " + image;
+                "\nimage= " + image+
+                "\nisTeacher= "+ isTeacher;
     }
 }
