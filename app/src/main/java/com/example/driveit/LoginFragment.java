@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginFragment extends Fragment {
+    //test from laptop
     Button btnLogin;
     EditText etEmailLogin, etPasswordLogin;
 
