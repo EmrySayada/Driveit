@@ -55,12 +55,12 @@ public class InputCheckSystem {
     }
 
     public static boolean checkEmailField(Context context, EditText emailField){
-        if(emailField.getText().toString().indexOf("@") == 0 || emailField.getText().toString().indexOf("@") == emailField.getText().length() - 1){
-            return false;
-        }else if(emailField.getText().toString().lastIndexOf('.') - emailField.getText().toString().lastIndexOf('@') == 1){
-            return false;
+        String regex = "^[a-z1-9]{3,}@[a-z]{2,}.[a-z]{3,}$";
+        String email = emailField.getText().toString();
+        if(email.matches(regex)){
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static boolean checkNameField(Context context, EditText nameField){

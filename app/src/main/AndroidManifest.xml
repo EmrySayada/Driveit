@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Driveit"
         tools:targetApi="31">
         <activity
+            android:name=".TeacherRegister"
+            android:exported="false" />
+        <activity
             android:name=".PupilActivity"
             android:exported="false" />
         <activity

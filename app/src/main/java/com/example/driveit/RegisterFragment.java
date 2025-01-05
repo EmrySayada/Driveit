@@ -28,16 +28,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class RegisterFragment extends Fragment {
     Button conBtnReg;
-    RadioButton isTeacherBtn;
+    ToggleButton isTeacherBtn;
     EditText usernameEtReg, emailEtReg, pwdEtReg, phoneEtReg;
     ImageView ivReg;
 
     String[] info;
     Bitmap image;
     User user;
+    Teacher teacher;
     DBHelper mydb;
     SQLiteDatabase sqdb;
     ActivityResultLauncher<Intent> arlPhoto;
@@ -76,20 +78,29 @@ public class RegisterFragment extends Fragment {
         conBtnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(InputCheckSystem.checkAllFieldRegister(v.getContext(), usernameEtReg, phoneEtReg, emailEtReg, pwdEtReg)){
-                    info[0]=usernameEtReg.getText().toString();
-                    info[1]=pwdEtReg.getText().toString();
-                    info[2]=emailEtReg.getText().toString();
-                    info[3]=phoneEtReg.getText().toString();
-                    image=((BitmapDrawable)ivReg.getDrawable()).getBitmap();
+                if(InputCheckSystem.checkAllFieldRegister(v.getContext(), usernameEtReg, phoneEtReg, emailEtReg, pwdEtReg)) {
+                    info[0] = usernameEtReg.getText().toString();
+                    info[1] = pwdEtReg.getText().toString();
+                    info[2] = emailEtReg.getText().toString();
+                    info[3] = phoneEtReg.getText().toString();
+                    image = ((BitmapDrawable) ivReg.getDrawable()).getBitmap();
                     int isTeacher = 0;
-                    if(isTeacherBtn.isChecked()){
+                    if (isTeacherBtn.isChecked()) {
                         isTeacher = 1;
                     }
-                    user=new User(info[0], info[1], info[2], info[3], image, isTeacher);
+                    user = new User(info[0], info[1], info[2], info[3], image, isTeacher);
                     sqdb = mydb.getWritableDatabase();
-                    if(!mydb.userExists(user.getUsername(),user.getPassword()))
+                    if (!mydb.userExists(user.getUsername(), user.getPassword())){
                         mydb.insert(user);
+                        if(isTeacher==1){
+                            user.setId(mydb.searchUserId(user.getUsername(),user.getPhone()));
+                            teacher = new Teacher(user, 0, "");
+                            Toast.makeText(getActivity(),teacher.toString() , Toast.LENGTH_LONG).show();
+                            mydb.insertTeacher(teacher);
+                            Intent intent = new Intent(getActivity(), TeacherRegister.class);
+                            startActivity(intent);
+                        }
+                    }
                     else
                         Toast.makeText(getActivity(),"User already exists!!!", Toast.LENGTH_SHORT).show();
                     sqdb.close();
@@ -97,6 +108,7 @@ public class RegisterFragment extends Fragment {
                     pwdEtReg.setText("");
                     emailEtReg.setText("");
                     phoneEtReg.setText("");
+                    isTeacherBtn.setChecked(false);
                 }
             }
         });

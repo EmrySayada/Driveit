@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 
 public class User implements Serializable {
+    private int id;
     private String username;
     private String password;
     private String email;
@@ -19,6 +20,20 @@ public class User implements Serializable {
         this.phone = phone;
         this.image = image;
         this.isTeacher = isTeacher;
+    }
+
+    public User(User other){
+        this.id = other.id;
+        this.username = other.username;
+        this.password = other.password;
+        this.email = other.email;
+        this.phone = other.phone;
+        this.image = other.image;
+        this.isTeacher = other.isTeacher;
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     public String getUsername() {
@@ -68,10 +83,14 @@ public class User implements Serializable {
     public void setIsTeacher(int isTeacher){
         this.isTeacher = isTeacher;
     }
+    public void setId(int id){
+        this.id = id;
+    }
 
     @Override
     public String toString(){
-        return "username= " + username +
+        return "id= " + id+
+                "\nusername= " + username +
                 "\npassword= " + password+
                 "\nphone= " + phone +
                 "\nemail= " + email +

@@ -21,19 +21,33 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final int DBVERSION=1;
 
     public static final String TABLE_NAME = "users";
+
+    public static final String KEY_ID="_id";
     public static final String USERNAME="username";
     public static final String PASSWORD="password";
     public static final String PHONE="phone";
     public static final String EMAIL="email";
     public static final String PICTURE="picture";
 
-    public static final String ISTEACHER="isteacher";
+    public static final String ISTEACHER="teacher";
+
+
+    //Teacher Table
+    public static final String TEACHER_TABLE_NAME = "teachers";
+    public static final String TEACHER_KEY_ID = "_id_teacher";
+    public static final String TEACHER_RATING = "rating";
+    public static final String TEACHER_REGION="region";
+
 
     //TODO add variables to another sql table
 
     private String SQL_Create = "";
     private String SQL_Delete = "";
     private SQLiteDatabase sqdb;
+
+    private String SQL_Teacher_Create = "";
+    private String SQL_Teacher_Delete = "";
+
 
     public DBHelper(@Nullable Context context){super(context, DBName, null, DBVERSION);}
 
@@ -42,6 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         SQL_Create = "CREATE TABLE " + TABLE_NAME + " (";
+        SQL_Create+=KEY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, ";
         SQL_Create+=USERNAME+" TEXT, ";
         SQL_Create+=PASSWORD+" TEXT, ";
         SQL_Create+=EMAIL+" TEXT, ";
@@ -51,6 +66,13 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_Create);
 
         // TODO create another table
+        //Teacher table creation
+        SQL_Teacher_Create = "CREATE TABLE " + TEACHER_TABLE_NAME + " (";
+        SQL_Teacher_Create += TEACHER_KEY_ID +" INTEGER, ";
+        SQL_Teacher_Create += TEACHER_RATING + " INTEGER, ";
+        SQL_Teacher_Create += TEACHER_REGION + " TEXT ";
+        SQL_Teacher_Create+=");";
+        db.execSQL(SQL_Teacher_Create);
     }
 
     @Override
@@ -58,7 +80,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Delete="DROP TABLE IF EXISTS "+TABLE_NAME;
         db.execSQL(SQL_Delete);
         //TODO onUpgrade another table
-
+        SQL_Teacher_Delete = "DROP TABLE IF EXISTS "+TEACHER_TABLE_NAME;
+        db.execSQL(SQL_Teacher_Delete);
         onCreate(db);
     }
 
@@ -85,6 +108,16 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    public void insertTeacher(Teacher teacher){
+        sqdb = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(TEACHER_KEY_ID, teacher.getId());
+        cv.put(TEACHER_RATING, teacher.getRating());
+        cv.put(TEACHER_REGION, teacher.getRating());
+        sqdb.insert(TEACHER_TABLE_NAME, null, cv);
+        sqdb.close();
+    }
+
     public boolean userExists(String email, String password){
         Cursor c;
         sqdb = getWritableDatabase();
@@ -104,11 +137,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public User searchUser(String username, String phone){
+    public int searchUserId(String username, String phone){
         Cursor c;
+        int s_id=0;
         User user = null;
         sqdb=getWritableDatabase();
         c=sqdb.query(TABLE_NAME, null, USERNAME+"=? AND "+PHONE+"=?", new String[]{username,phone}, null, null, null);
+        int col_id = c.getColumnIndex(KEY_ID);
         int col1=c.getColumnIndex(USERNAME);
         int col2=c.getColumnIndex(PASSWORD);
         int col3=c.getColumnIndex(EMAIL);
@@ -117,6 +152,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int col6=c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
         while(!c.isAfterLast()){
+            s_id = c.getInt(col_id);
             String s1 = c.getString(col1);
             String s2 = c.getString(col2);
             String s3 = c.getString(col3);
@@ -127,7 +163,7 @@ public class DBHelper extends SQLiteOpenHelper {
             c.moveToNext();
         }
         sqdb.close();
-        return user;
+        return s_id;
     }
 
 
@@ -136,6 +172,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<User> arrUsers = new ArrayList<>();
         sqdb=getWritableDatabase();
         c=sqdb.query(TABLE_NAME, null, null, null, null, null, null);
+        int id_col = c.getColumnIndex(KEY_ID);
         int col1=c.getColumnIndex(USERNAME);
         int col2=c.getColumnIndex(PASSWORD);
         int col3=c.getColumnIndex(EMAIL);
@@ -144,6 +181,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int col6 = c.getColumnIndex(ISTEACHER);
         c.moveToNext();
         while(!c.isAfterLast()){
+            int s_id= c.getInt(id_col);
             String s1 = c.getString(col1);
             String s2 = c.getString(col2);
             String s3 = c.getString(col3);
@@ -181,6 +219,7 @@ public class DBHelper extends SQLiteOpenHelper {
         User user = null;
         sqdb=getWritableDatabase();
         c=sqdb.query(TABLE_NAME, null, EMAIL+"=? AND "+PASSWORD+"=?", new String[]{email,password}, null, null, null);
+        int col_id = c.getColumnIndex(KEY_ID);
         int col1=c.getColumnIndex(USERNAME);
         int col2=c.getColumnIndex(PASSWORD);
         int col3=c.getColumnIndex(EMAIL);
@@ -189,6 +228,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int col6=c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
         while(!c.isAfterLast()){
+            int s_id = c.getInt(col_id);
             String s1 = c.getString(col1);
             String s2 = c.getString(col2);
             String s3 = c.getString(col3);
@@ -206,4 +246,38 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return false;
     }
+
+    public void addInformationToTeacher(int region, int experience){
+
+    }
+
+//    public ArrayList<Teacher> getAllTeachers(){
+//        Cursor c;
+//        Cursor cTeachers;
+//        ArrayList<Teacher> arrTeachers = new ArrayList<>();
+//        sqdb=getWritableDatabase();
+//        c=sqdb.query(TABLE_NAME, null, null, null, null, null, null);
+//        int id_col = c.getColumnIndex(KEY_ID);
+//        int col1=c.getColumnIndex(USERNAME);
+//        int col2=c.getColumnIndex(PASSWORD);
+//        int col3=c.getColumnIndex(EMAIL);
+//        int col4=c.getColumnIndex(PHONE);
+//        int col5=c.getColumnIndex(PICTURE);
+//        int col6 = c.getColumnIndex(ISTEACHER);
+//        c.moveToNext();
+//        while(!c.isAfterLast()){
+//            int s_id= c.getInt(id_col);
+//            String s1 = c.getString(col1);
+//            String s2 = c.getString(col2);
+//            String s3 = c.getString(col3);
+//            String s4 = c.getString(col4);
+//            Bitmap image=getPicture(c.getBlob(col5));
+//            int s6 = c.getInt(col6);
+//            User user = new User(s_id, s1,s2,s3,s4,image, s6);
+//            arrUsers.add(user);
+//            c.moveToNext();
+//        }
+//        sqdb.close();
+//        return arrUsers;
+//    }
 }
