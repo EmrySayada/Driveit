@@ -1,18 +1,21 @@
 package com.example.driveit;
 
 import android.graphics.Bitmap;
+import android.os.Parcelable;
 
-public class Teacher extends User{
+import java.util.ArrayList;
+
+public class Teacher extends User {
     private int rating;
-    private String region;
+    private ArrayList<String> region;
 
-    public Teacher(int rating, String region, int id, String username, String password, String email, String phone, Bitmap image, int isTeacher) {
+    public Teacher(int id, String username, String password, String email, String phone, Bitmap image, int isTeacher, int rating, ArrayList<String> region) {
         super(username, password, email, phone, image, isTeacher);
         this.rating = rating;
         this.region = region;
     }
 
-    public Teacher(User user, int rating, String region){
+    public Teacher(User user, int rating, ArrayList<String> region){
         super(user);
         this.rating = rating;
         this.region = region;
@@ -26,11 +29,11 @@ public class Teacher extends User{
         this.rating = rating;
     }
 
-    public String getRegion() {
+    public ArrayList<String> getRegion() {
         return region;
     }
 
-    public void setRegion(String region) {
+    public void setRegion(ArrayList<String> region) {
         this.region = region;
     }
 

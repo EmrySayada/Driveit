@@ -30,6 +30,8 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
+
 public class RegisterFragment extends Fragment {
     Button conBtnReg;
     ToggleButton isTeacherBtn;
@@ -94,10 +96,11 @@ public class RegisterFragment extends Fragment {
                         mydb.insert(user);
                         if(isTeacher==1){
                             user.setId(mydb.searchUserId(user.getUsername(),user.getPhone()));
-                            teacher = new Teacher(user, 0, "");
-                            Toast.makeText(getActivity(),teacher.toString() , Toast.LENGTH_LONG).show();
-                            mydb.insertTeacher(teacher);
+                            teacher = new Teacher(user, 0, new ArrayList<>());
+//                            Toast.makeText(getActivity(),teacher.toString() , Toast.LENGTH_LONG).show();
+//                            mydb.insertTeacher(teacher);
                             Intent intent = new Intent(getActivity(), TeacherRegister.class);
+                            intent.putExtra("teacher", teacher);
                             startActivity(intent);
                         }
                     }

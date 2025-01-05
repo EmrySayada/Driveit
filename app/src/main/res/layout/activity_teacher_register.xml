@@ -26,7 +26,7 @@
         app:layout_constraintVertical_bias="0.063" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/finishBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custombutton"
@@ -46,52 +46,59 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.539">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/centerChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             android:text="Center" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/beershevaShip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             android:text="Beersheva" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/eilatChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             android:text="Eilat" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/gazaPermiterChip"
+            android:id="@+id/gazaPerimeterChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gaza Sroundings" />
+            android:backgroundTint="@color/white"
+            android:text="Gaza Envelope" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/haifaChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             android:text="Haifa" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/golanChip"
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
             android:text="Gloan" />
     </com.google.android.material.chip.ChipGroup>
 
     <EditText
-        android:id="@+id/experience"
+        android:id="@+id/etTeacherExp"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:background="@drawable/input"
         android:elevation="10dp"
-
         android:ems="10"
         android:fontFamily="@font/poppins"
         android:hint="How long have you been teaching?"
@@ -103,7 +110,7 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.72" />
+        app:layout_constraintVertical_bias="0.256" />
 
     <TextView
         android:id="@+id/textView6"
@@ -114,9 +121,10 @@
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.182" />
+        app:layout_constraintVertical_bias="0.16" />
 
     <TextView
         android:id="@+id/textView7"
@@ -130,7 +138,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.054" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
