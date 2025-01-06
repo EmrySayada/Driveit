@@ -44,6 +44,7 @@ public class RegisterFragment extends Fragment {
     Teacher teacher;
     DBHelper mydb;
     SQLiteDatabase sqdb;
+    Bitmap userImage;
     ActivityResultLauncher<Intent> arlPhoto;
     ActivityResultLauncher<String> arlGallery;
 
@@ -96,10 +97,12 @@ public class RegisterFragment extends Fragment {
                         mydb.insert(user);
                         if(isTeacher==1){
                             user.setId(mydb.searchUserId(user.getUsername(),user.getPhone()));
-                            teacher = new Teacher(user, 0, new ArrayList<>());
+                            teacher = new Teacher(user, 0, 0,"");
 //                            Toast.makeText(getActivity(),teacher.toString() , Toast.LENGTH_LONG).show();
 //                            mydb.insertTeacher(teacher);
                             Intent intent = new Intent(getActivity(), TeacherRegister.class);
+                            userImage = teacher.getImage();
+                            teacher.setImage(null);
                             intent.putExtra("teacher", teacher);
                             startActivity(intent);
                         }

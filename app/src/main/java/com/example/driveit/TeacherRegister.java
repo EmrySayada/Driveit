@@ -43,11 +43,11 @@ public class TeacherRegister extends AppCompatActivity {
         });
         init();
         Intent i = getIntent();
-        teacher = (Teacher) i.getExtras().get("teacher");
+        teacher = (Teacher) i.getSerializableExtra("teacher");
+        Toast.makeText(this, teacher.toString(), Toast.LENGTH_SHORT).show();
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> regionList = new ArrayList<>();
                 Toast.makeText(TeacherRegister.this, chipGroup.getCheckedChipIds()+"", Toast.LENGTH_SHORT).show();
 //                teacher.setRegion();
             }

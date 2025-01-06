@@ -1,7 +1,13 @@
 package com.example.driveit;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -86,6 +92,7 @@ public class User implements Serializable {
     public void setId(int id){
         this.id = id;
     }
+
 
     @Override
     public String toString(){
