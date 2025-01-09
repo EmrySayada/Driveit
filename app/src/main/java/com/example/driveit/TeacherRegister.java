@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -25,6 +26,7 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -35,9 +37,12 @@ public class TeacherRegister extends AppCompatActivity {
     DBHelper mydb;
     SQLiteDatabase sqdb;
     Button finishBtn;
-    Spinner spFiles;
-    ArrayList<String> allRegions;
+    Spinner spRegions;
     ArrayAdapter<String> adapRegions;
+    ArrayList<String> regions;
+    InputStreamReader isr;
+    InputStream is;
+    BufferedReader br;
 
 
     @Override
@@ -51,54 +56,57 @@ public class TeacherRegister extends AppCompatActivity {
             return insets;
         });
         init();
+        regions.add("Select Region");
         Intent i = getIntent();
         teacher = (Teacher) i.getSerializableExtra("teacher");
         Toast.makeText(this, teacher.toString(), Toast.LENGTH_SHORT).show();
+        goReadFromFile();
+        spRegions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                teacher.setRegion(regions.get(position));
+                Toast.makeText(TeacherRegister.this, "selected: "+regions.get(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(TeacherRegister.this, chipGroup.getCheckedChipIds()+"", Toast.LENGTH_SHORT).show();
-//                teacher.setRegion();
+                Toast.makeText(TeacherRegister.this, teacher.getRegion()+"", Toast.LENGTH_SHORT).show();
             }
         });
         // when the user finishes the signing up steps, the activity closes, and the user has to log in again.
 
     }
 
-    private void goReadFromFile() {
-        is=this.getResources().openRawResource(R.raw.names);
+    public void goReadFromFile(){
+        is=this.getResources().openRawResource(R.raw.regions);
         isr=new InputStreamReader(is);
         br=new BufferedReader(isr);
         String temp = "";
-        int i = 0;
         try{
             while((temp = br.readLine())!=null){
-                patients[i]=temp;
-                i++;
+                regions.add(temp);
             }
             is.close();
         }catch (IOException e){
             e.printStackTrace();
         }
-        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                file_name="visit_in: "+dayOfMonth+"_"+month+"_"+year;
-                tvDate.setText(file_name);
-            }
-        });
+
+
     }
 
     public void init(){
-//        center = findViewById(R.id.centerChip);
-//        beersheva = findViewById(R.id.beershevaShip);
-//        eilat = findViewById(R.id.eilatChip);
-//        gazaPerimeter = findViewById(R.id.gazaPerimeterChip);
-//        haifa = findViewById(R.id.haifaChip);
-//        golan = findViewById(R.id.golanChip);
-//        chipGroup = findViewById(R.id.chipGroup);
         etTeacherExp = findViewById(R.id.etTeacherExp);
         mydb = new DBHelper(this);
         finishBtn = findViewById(R.id.finishBtn);
+        spRegions = findViewById(R.id.spinner);
+        regions = new ArrayList<>();
+        adapRegions = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, regions);
+        spRegions.setAdapter(adapRegions);
     }
 }

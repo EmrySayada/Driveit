@@ -38,61 +38,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.919" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
-        android:layout_width="314dp"
-        android:layout_height="129dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.539">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/centerChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Center" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/beershevaShip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Beersheva" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/eilatChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Eilat" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/gazaPerimeterChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Gaza Envelope" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/haifaChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Haifa" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/golanChip"
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="Gloan" />
-    </com.google.android.material.chip.ChipGroup>
-
     <EditText
         android:id="@+id/etTeacherExp"
         android:layout_width="300dp"
@@ -148,7 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" />
+        app:layout_constraintVertical_bias="0.499" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
