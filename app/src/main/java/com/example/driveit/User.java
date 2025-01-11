@@ -17,6 +17,7 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private Bitmap image;
+    private int currentTeacherId;
     private int isTeacher;
 
     public User(String username, String password, String email, String phone, Bitmap image, int isTeacher){
@@ -36,6 +37,7 @@ public class User implements Serializable {
         this.phone = other.phone;
         this.image = other.image;
         this.isTeacher = other.isTeacher;
+        this.currentTeacherId = other.currentTeacherId;
     }
 
     public int getId(){
@@ -81,11 +83,11 @@ public class User implements Serializable {
     public void setImage(Bitmap image) {
         this.image = image;
     }
-
+    public int getCurrentTeacherId(){return this.currentTeacherId;}
+    public void setCurrentTeacherId(int currentTeacherId){this.currentTeacherId = currentTeacherId;}
     public int getIsTeacher(){
         return this.isTeacher;
     }
-
     public void setIsTeacher(int isTeacher){
         this.isTeacher = isTeacher;
     }

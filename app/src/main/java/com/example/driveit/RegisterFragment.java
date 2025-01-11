@@ -93,13 +93,11 @@ public class RegisterFragment extends Fragment {
                     }
                     user = new User(info[0], info[1], info[2], info[3], image, isTeacher);
                     sqdb = mydb.getWritableDatabase();
-                    if (!mydb.userExists(user.getUsername(), user.getPassword())){
+                    if (!mydb.userExists(user.getEmail(), user.getPassword())){
                         mydb.insert(user);
                         if(isTeacher==1){
                             user.setId(mydb.searchUserId(user.getUsername(),user.getPhone()));
                             teacher = new Teacher(user, 0, 0,"");
-//                            Toast.makeText(getActivity(),teacher.toString() , Toast.LENGTH_LONG).show();
-//                            mydb.insertTeacher(teacher);
                             Intent intent = new Intent(getActivity(), TeacherRegister.class);
                             userImage = teacher.getImage();
                             teacher.setImage(null);

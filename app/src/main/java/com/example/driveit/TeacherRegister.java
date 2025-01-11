@@ -43,6 +43,7 @@ public class TeacherRegister extends AppCompatActivity {
     InputStreamReader isr;
     InputStream is;
     BufferedReader br;
+    String region;
 
 
     @Override
@@ -61,11 +62,11 @@ public class TeacherRegister extends AppCompatActivity {
         teacher = (Teacher) i.getSerializableExtra("teacher");
         Toast.makeText(this, teacher.toString(), Toast.LENGTH_SHORT).show();
         goReadFromFile();
+        spRegions.setAdapter(adapRegions);
         spRegions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                teacher.setRegion(regions.get(position));
-                Toast.makeText(TeacherRegister.this, "selected: "+regions.get(position), Toast.LENGTH_SHORT).show();
+                region = regions.get(position);
             }
 
             @Override
@@ -76,7 +77,17 @@ public class TeacherRegister extends AppCompatActivity {
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TeacherRegister.this, teacher.getRegion()+"", Toast.LENGTH_SHORT).show();
+                int exp = 0;
+                sqdb = mydb.getWritableDatabase();
+                if(etTeacherExp.length() > 0){
+                    exp = Integer.parseInt(etTeacherExp.getText().toString());
+                    teacher.setExp(exp);
+                    teacher.setRating(0);
+                    teacher.setRegion(region);
+                    mydb.insertTeacher(teacher);
+                }
+                sqdb.close();
+                finish();
             }
         });
         // when the user finishes the signing up steps, the activity closes, and the user has to log in again.
@@ -107,6 +118,5 @@ public class TeacherRegister extends AppCompatActivity {
         spRegions = findViewById(R.id.spinner);
         regions = new ArrayList<>();
         adapRegions = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, regions);
-        spRegions.setAdapter(adapRegions);
     }
 }

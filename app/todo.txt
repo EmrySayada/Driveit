@@ -1,0 +1,22 @@
+TODO:
+    - if the user has no current teacher (current_teacher_id = 0)
+    - move them to an activity where all the available teachers are listed
+    - order them by regions, closer to further
+    - when a user finds a teacher, he can send a request to the teacher
+    - when the teachers login they can check an Activity where all the request are found
+    - the request will be on a separate table
+    - the Request Object will contain the following:
+        - student Id
+        - teacher Id
+        - timestamp
+        - status
+    - a request will an availability time period where the teacher can accept, probably about 30 days
+    - if the teacher doesn't answer within this time period then the request expire and is deleted from the database
+    - in the next login.
+    - needed functions
+        - find user by Id (DBHelper)
+        - find teacher by Id (DBHelper)
+        - list all teachers (DBHelper)
+    - activities needed
+        - list teachers activity (ListView, teacherAdapter)
+        - Request list activity (ListView, requestAdapter)
