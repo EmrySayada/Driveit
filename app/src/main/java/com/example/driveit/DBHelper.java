@@ -171,6 +171,33 @@ public class DBHelper extends SQLiteOpenHelper {
         return s_id;
     }
 
+    public User getUserById(int id){
+        Cursor c;
+        User user = null;
+        sqdb = getWritableDatabase();
+        c = sqdb.query(TABLE_NAME, null, KEY_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+        int col1=c.getColumnIndex(USERNAME);
+        int col2=c.getColumnIndex(PASSWORD);
+        int col3=c.getColumnIndex(EMAIL);
+        int col4=c.getColumnIndex(PHONE);
+        int col5=c.getColumnIndex(PICTURE);
+        int col6=c.getColumnIndex(ISTEACHER);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            String s1 = c.getString(col1);
+            String s2 = c.getString(col2);
+            String s3 = c.getString(col3);
+            String s4 = c.getString(col4);
+            Bitmap image = getPicture(c.getBlob(col5));
+            int s6 = c.getInt(col6);
+            user = new User(s1, s2, s3, s4, image, s6);
+            user.setId(id);
+            c.moveToNext();
+        }
+        sqdb.close();
+        return user;
+    }
+
 
     public ArrayList<User> getAllUsers(){
         Cursor c;
@@ -254,47 +281,29 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Teacher> getAllTeachers(){
+        // function loops through the teacher table and uses the teacher id to find the user information in the users table.
         Cursor c;
-        Cursor cTeachers;
+        Teacher teacher = null;
+        User user = null;
         ArrayList<Teacher> arrTeachers = new ArrayList<>();
-        ArrayList<User> arrUsers = new ArrayList<>();
-        sqdb=getWritableDatabase();
-        c=sqdb.query(TABLE_NAME, null, null, null, null, null, null);
-        int id_col = c.getColumnIndex(KEY_ID);
-        int col1=c.getColumnIndex(USERNAME);
-        int col2=c.getColumnIndex(PASSWORD);
-        int col3=c.getColumnIndex(EMAIL);
-        int col4=c.getColumnIndex(PHONE);
-        int col5=c.getColumnIndex(PICTURE);
-        int col6 = c.getColumnIndex(ISTEACHER);
+        sqdb = getWritableDatabase();
+        c = sqdb.query(TEACHER_TABLE_NAME, null, null, null, null, null, null);
+        int id_col = c.getColumnIndex(TEACHER_KEY_ID);
+        int col1 = c.getColumnIndex(TEACHER_RATING);
+        int col2 = c.getColumnIndex(TEACHER_EXP);
+        int col3 = c.getColumnIndex(TEACHER_REGION);
         c.moveToFirst();
         while(!c.isAfterLast()){
-            int s_id= c.getInt(id_col);
-            String s1 = c.getString(col1);
-            String s2 = c.getString(col2);
-            String s3 = c.getString(col3);
-            String s4 = c.getString(col4);
-            Bitmap image=getPicture(c.getBlob(col5));
-            int s6 = c.getInt(col6);
-            User user = new User(s1,s2,s3,s4,image, s6);
-            user.setId(s_id);
-            arrUsers.add(user);
+            int id = c.getInt(id_col);
+            int teacher_rating = c.getInt(col1);
+            int teacher_exp = c.getInt(col2);
+            String teacher_region = c.getString(col3);
+            user = getUserById(id);
+            teacher = new Teacher(user, teacher_rating, teacher_exp, teacher_region);
+            arrTeachers.add(teacher);
             c.moveToNext();
         }
-        cTeachers=sqdb.query(TEACHER_TABLE_NAME, null, null, null, null, null, null);
-        int teacher_id_col = cTeachers.getColumnIndex(TEACHER_KEY_ID);
-        int teacher_rating_col = cTeachers.getColumnIndex(TEACHER_RATING);
-        int teacher_exp_col = cTeachers.getColumnIndex(TEACHER_EXP);
-        int teacher_region_col = cTeachers.getColumnIndex(TEACHER_REGION);
-        cTeachers.moveToFirst();
-        while(!cTeachers.isAfterLast()){
-            int teacher_id = cTeachers.getInt(teacher_id_col);
-            int teacher_rating = cTeachers.getInt(teacher_rating_col);
-            int teacher_exp = cTeachers.getInt(teacher_exp_col);
-            String teacher_region = cTeachers.getString(teacher_region_col);
-
-        }
         sqdb.close();
-        return new ArrayList<>();
+        return arrTeachers;
     }
 }
