@@ -1,6 +1,7 @@
 package com.example.driveit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -20,9 +21,9 @@ public class PupilActivity extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     Button pupilSignOutBtn;
-    ListView lv;
-    ArrayList<Teacher> arrTeachers;
-    TeacherAdapter adapter;
+//    ListView lv;
+//    ArrayList<Teacher> arrTeachers;
+//    TeacherAdapter adapter;
     DBHelper mydb;
     SQLiteDatabase sqdb;
 
@@ -38,7 +39,10 @@ public class PupilActivity extends AppCompatActivity {
             return insets;
         });
         init();
-        createListOfTeachers();
+        if(mydb.isWithoutTeacher(sp.getString("email", ""))){
+            Intent intent = new Intent(PupilActivity.this, ChooseTeacher.class);
+            startActivity(intent);
+        }
 
         pupilSignOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,16 +60,16 @@ public class PupilActivity extends AppCompatActivity {
     public void init(){
         pupilSignOutBtn = findViewById(R.id.pupilSignOutBtn);
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
-        lv = findViewById(R.id.lv);
+//        lv = findViewById(R.id.lv);
         mydb = new DBHelper(this);
-        arrTeachers = new ArrayList<>();
+//        arrTeachers = new ArrayList<>();
         editor = sp.edit();
     }
 
-    public void createListOfTeachers(){
-        arrTeachers.clear();
-        arrTeachers=mydb.getAllTeachers();
-        adapter = new TeacherAdapter(this, R.layout.list_teachers, arrTeachers);
-        lv.setAdapter(adapter);
-    }
+//    public void createListOfTeachers(){
+//        arrTeachers.clear();
+//        arrTeachers=mydb.getAllTeachers();
+//        adapter = new TeacherAdapter(this, R.layout.list_teachers, arrTeachers);
+//        lv.setAdapter(adapter);
+//    }
 }

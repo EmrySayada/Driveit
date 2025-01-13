@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Driveit"
         tools:targetApi="31">
         <activity
+            android:name=".ChooseTeacher"
+            android:exported="false" />
+        <activity
             android:name=".TeacherRegister"
             android:exported="false" />
         <activity
@@ -27,9 +30,6 @@
             android:exported="false" />
         <activity
             android:name=".TeacherActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoggedIn"
             android:exported="false" />
         <activity
             android:name=".Start"

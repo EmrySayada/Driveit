@@ -306,4 +306,24 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
         return arrTeachers;
     }
+
+    public boolean isWithoutTeacher(String email){
+        Cursor c;
+        User user = null;
+        int current_teacher_id_final = 0;
+        sqdb = getWritableDatabase();
+        c = sqdb.query(TABLE_NAME, null, EMAIL+"=?", new String[]{email}, null, null, null);
+        int teacher_id_col = c.getColumnIndex(CURRENTTEACHERID);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            int current_teacher_id = c.getInt(teacher_id_col);
+            current_teacher_id_final = current_teacher_id;
+            c.moveToNext();
+        }
+        sqdb.close();
+        if(current_teacher_id_final == 0){
+            return true;
+        }
+        return false;
+    }
 }
