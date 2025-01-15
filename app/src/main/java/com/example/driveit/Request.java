@@ -5,6 +5,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class Request {
+    private int request_id;
     private int student_id;
     private int teacher_id;
     private String timestamp;
@@ -27,7 +28,17 @@ public class Request {
         this.status = "Pending";
     }
 
+    public Request(int id, int student_id, int teacher_id, String timestamp, String status){
+        // a constructor for DBHelper functions
+        this.request_id = id;
+        this.student_id = student_id;
+        this.teacher_id = teacher_id;
+        this.timestamp = timestamp;
+        this.status = status;
+    }
+
     public Request(Request other){
+        // a self builder
         this.student_id = other.student_id;
         this.teacher_id = other.teacher_id;
         this.timestamp = other.timestamp;
@@ -64,6 +75,22 @@ public class Request {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getId(){
+        return this.request_id;
+    }
+    public void setId(int id){
+        this.request_id = id;
+    }
+
+    @Override
+    public String toString(){
+        return "request_id: " + this.request_id +
+                "\nstudent_id: "+ this.student_id +
+                "\nteacher_id: " + this.teacher_id +
+                "\ntimestamp: " + this.timestamp +
+                "\nstatus: " + this.status;
     }
 
 

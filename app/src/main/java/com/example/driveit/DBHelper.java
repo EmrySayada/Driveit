@@ -40,14 +40,30 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TEACHER_REGION="region";
 
 
+    //requests table
+    public static final String REQUEST_TABLE_NAME = "requests";
+    public static final String REQUEST_KEY_ID = "_id_request";
+    public static final String REQUEST_STUDENT_ID = "student_id";
+    public static final String REQUEST_TEACHER_ID = "teacher_id";
+    public static final String REQUEST_TIMESTAMP = "timestamp";
+    public static final String REQUEST_STATUS = "status";
+
+
+
+
     //TODO add variables to another sql table
 
     private String SQL_Create = "";
     private String SQL_Delete = "";
     private SQLiteDatabase sqdb;
 
+    // teacher table create/delete
     private String SQL_Teacher_Create = "";
     private String SQL_Teacher_Delete = "";
+
+    //Request table create/delete
+    private String SQL_Request_Create = "";
+    private String SQL_Request_Delete = "";
 
 
     public DBHelper(@Nullable Context context){super(context, DBName, null, DBVERSION);}
@@ -76,6 +92,15 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Teacher_Create += TEACHER_REGION + " TEXT ";
         SQL_Teacher_Create+=");";
         db.execSQL(SQL_Teacher_Create);
+
+        // Request table create
+        SQL_Request_Create = "CREATE TABLE " + REQUEST_TABLE_NAME + " (";
+        SQL_Request_Create += REQUEST_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, ";
+        SQL_Request_Create += REQUEST_STUDENT_ID + " INTEGER, ";
+        SQL_Request_Create += REQUEST_TEACHER_ID + " INTEGER, ";
+        SQL_Request_Create += REQUEST_TIMESTAMP + " TEXT, ";
+        SQL_Request_Create += REQUEST_STATUS + " TEXT);";
+        db.execSQL(SQL_Request_Create);
     }
 
     @Override
@@ -85,6 +110,9 @@ public class DBHelper extends SQLiteOpenHelper {
         //TODO onUpgrade another table
         SQL_Teacher_Delete = "DROP TABLE IF EXISTS "+TEACHER_TABLE_NAME;
         db.execSQL(SQL_Teacher_Delete);
+
+        SQL_Request_Delete = "DROP TABLE IF EXISTS " + REQUEST_TABLE_NAME;
+        db.execSQL(SQL_Request_Delete);
         onCreate(db);
     }
 
@@ -121,6 +149,43 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(TEACHER_REGION, teacher.getRegion());
         sqdb.insert(TEACHER_TABLE_NAME, null, cv);
         sqdb.close();
+    }
+
+    public void insertRequest(Request r){
+        sqdb = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(REQUEST_KEY_ID, r.getId());
+        cv.put(REQUEST_STUDENT_ID, r.getStudent_id());
+        cv.put(REQUEST_TEACHER_ID, r.getTeacher_id());
+        cv.put(REQUEST_TIMESTAMP, r.getTimestamp());
+        cv.put(REQUEST_STATUS, r.getStatus());
+        sqdb.insert(REQUEST_TABLE_NAME, null, cv);
+        sqdb.close();
+    }
+
+    public ArrayList<Request> getAllTeacherRequests(int id){
+        Cursor c;
+        ArrayList<Request> requestArr = new ArrayList<>();
+        sqdb = getWritableDatabase();
+        c = sqdb.query(REQUEST_TABLE_NAME, null, REQUEST_TEACHER_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+        int request_id_col = c.getColumnIndex(REQUEST_KEY_ID);
+        int student_id_col = c.getColumnIndex(REQUEST_STUDENT_ID);
+        int teacher_id_col = c.getColumnIndex(REQUEST_TEACHER_ID);
+        int timestamp_col = c.getColumnIndex(REQUEST_TIMESTAMP);
+        int status_col = c.getColumnIndex(REQUEST_STATUS);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            int request_id = c.getInt(request_id_col);
+            int request_student_id = c.getInt(student_id_col);
+            int request_teacher_id = c.getInt(teacher_id_col);
+            String request_timestamp = c.getString(timestamp_col);
+            String request_status = c.getString(status_col);
+            Request request = new Request(request_id, request_student_id, request_teacher_id, request_timestamp, request_status);
+            requestArr.add(request);
+            c.moveToNext();
+        }
+        sqdb.close();
+        return requestArr;
     }
 
     public boolean userExists(String email, String password){
