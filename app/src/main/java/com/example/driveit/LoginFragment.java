@@ -50,10 +50,12 @@ public class LoginFragment extends Fragment {
                     sqdb = mydb.getWritableDatabase();
                     boolean isTeacher = mydb.isTeacherInDB(email, password);
                     if(mydb.userExists(email, password)){
+                        int user_id = mydb.searchUserIdByEmail(email);
                         editor.putString("email", email);
                         editor.putString("password", password);
                         editor.putBoolean("isTeacher", isTeacher);
                         editor.putBoolean("isConnected", true);
+                        editor.putInt("userId", user_id);
                         editor.commit();
                         transfetUserAfterLogin(isTeacher);
                     }else{

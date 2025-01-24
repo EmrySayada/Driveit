@@ -154,7 +154,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void insertRequest(Request r){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(REQUEST_KEY_ID, r.getId());
         cv.put(REQUEST_STUDENT_ID, r.getStudent_id());
         cv.put(REQUEST_TEACHER_ID, r.getTeacher_id());
         cv.put(REQUEST_TIMESTAMP, r.getTimestamp());
@@ -241,7 +240,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int s_id=0;
         User user = null;
         sqdb=getWritableDatabase();
-        c=sqdb.query(TABLE_NAME, null, USERNAME+"=?", new String[]{email}, null, null, null);
+        c=sqdb.query(TABLE_NAME, null, EMAIL+"=?", new String[]{email}, null, null, null);
         int col_id = c.getColumnIndex(KEY_ID);
         int col1=c.getColumnIndex(USERNAME);
         int col2=c.getColumnIndex(PASSWORD);
@@ -403,7 +402,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean isWithoutTeacher(String email){
         Cursor c;
-        User user = null;
         int current_teacher_id_final = 0;
         sqdb = getWritableDatabase();
         c = sqdb.query(TABLE_NAME, null, EMAIL+"=?", new String[]{email}, null, null, null);
@@ -415,9 +413,6 @@ public class DBHelper extends SQLiteOpenHelper {
             c.moveToNext();
         }
         sqdb.close();
-        if(current_teacher_id_final == 0){
-            return true;
-        }
-        return false;
+        return current_teacher_id_final == 0;
     }
 }

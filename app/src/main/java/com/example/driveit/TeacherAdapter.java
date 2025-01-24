@@ -1,6 +1,8 @@
 package com.example.driveit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -20,11 +23,16 @@ public class TeacherAdapter extends ArrayAdapter<Teacher> {
     String name, region;
     int exp;
     Bitmap image;
+    int studentId;
 
     public TeacherAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Teacher> objects) {
         super(context, resource, objects);
         this.context=context;
         this.resource=resource;
+    }
+
+    public void setStudentId(int studentId){
+        this.studentId = studentId;
     }
 
     public static class ViewHolder{
@@ -58,7 +66,17 @@ public class TeacherAdapter extends ArrayAdapter<Teacher> {
         holder.nameTv.setText(name);
         holder.expTv.setText(exp + " years");
         holder.regionTv.setText(region);
-        holder.requestBtn.setOnClickListener(null);
+        holder.requestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Request r = new Request(studentId, getItem(position).getId());
+                DBHelper mydb = new DBHelper(context);
+                SQLiteDatabase sqdb = mydb.getWritableDatabase();
+                mydb.insertRequest(r);
+                sqdb.close();
+                Toast.makeText(context, "Sent Request!", Toast.LENGTH_SHORT).show();
+            }
+        });
         return convertView;
     }
 }

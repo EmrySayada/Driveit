@@ -1,5 +1,6 @@
 package com.example.driveit;
 
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -20,8 +21,8 @@ public class ChooseTeacher extends AppCompatActivity {
     ArrayList<Teacher> arrTeachers;
     TeacherAdapter adapter;
     DBHelper mydb;
-
     SQLiteDatabase sqdb;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +36,21 @@ public class ChooseTeacher extends AppCompatActivity {
         });
         init();
         createListOfTeachers();
+
     }
 
     public void init(){
         lv = findViewById(R.id.lv);
         mydb = new DBHelper(this);
         arrTeachers = new ArrayList<>();
+        sp = getSharedPreferences("PREFS_FILE", MODE_PRIVATE);
     }
     public void createListOfTeachers(){
+        int id = sp.getInt("userId", 0);
         arrTeachers.clear();
         arrTeachers=mydb.getAllTeachers();
         adapter = new TeacherAdapter(this, R.layout.list_teachers, arrTeachers);
+        adapter.setStudentId(id);
         lv.setAdapter(adapter);
     }
 }

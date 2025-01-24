@@ -19,9 +19,7 @@ public class Request {
     public String getDate(){
         // date format DD/MM/YYYY
         Calendar cld = Calendar.getInstance();
-        timestamp += cld.get(Calendar.DAY_OF_MONTH) + "/";
-        timestamp += cld.get(Calendar.MONTH) + "/";
-        timestamp += cld.get(Calendar.YEAR);
+        timestamp = cld.toString();
         return timestamp;
     }
 
@@ -116,6 +114,7 @@ public class Request {
         this.sqdb.close();
         return user.getPhone();
     }
+
 
     @Override
     public String toString(){
