@@ -1,7 +1,10 @@
 package com.example.driveit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,23 +19,14 @@ import java.util.ArrayList;
 public class RequestAdapter extends ArrayAdapter<Request> {
     private Context context;
     private int resource;
-    private int student_id;
-    private User user;
-    private DBHelper mydb;
-    private SQLiteDatabase sqdb;
+    String student_name, phone_number;
+    Bitmap image;
+
 
     public RequestAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Request> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
-    }
-
-    public User getUserInformation(int id){
-        User user = null;
-        sqdb = mydb.getWritableDatabase();
-        user = mydb.getUserById(id);
-        sqdb.close();
-        return user;
     }
 
     public static class ViewHolder{
@@ -43,14 +37,32 @@ public class RequestAdapter extends ArrayAdapter<Request> {
 
     @Override
     public View getView(int position, @NonNull android.view.View convertView, @NonNull android.view.ViewGroup parent){
-        student_id = getItem(position).getStudent_id();
-        user = getUserInformation(student_id);
+        student_name = getItem(position).getUserUsername();
+        phone_number = getItem(position).getUserPhoneNumber();
+        image = getItem(position).getUserImage();
         ViewHolder holder;
         if(convertView==null){
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView=inflater.inflate(resource, parent, false);
             holder = new ViewHolder();
+            holder.studentPic = convertView.findViewById(R.id.studentPic);
+            holder.studentName = convertView.findViewById(R.id.studentName);
+            holder.callBtn = convertView.findViewById(R.id.callBtn);
+            convertView.setTag(holder);
+        }else{
+            holder=(ViewHolder) convertView.getTag();
         }
+        holder.studentPic.setImageBitmap(image);
+        holder.studentName.setText(student_name);
+        holder.callBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tel = "tel:" + phone_number;
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
+                context.startActivity(intent);
+            }
+        });
+        return convertView;
 
     }
 }

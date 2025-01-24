@@ -8,6 +8,8 @@
         tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"
+        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Driveit"
         tools:targetApi="31">
+        <activity
+            android:name=".RequestActivity"
+            android:exported="false" />
         <activity
             android:name=".ChooseTeacher"
             android:exported="false" />

@@ -1,5 +1,8 @@
 package com.example.driveit;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -10,6 +13,8 @@ public class Request {
     private int teacher_id;
     private String timestamp;
     private String status;
+    private DBHelper mydb;
+    private SQLiteDatabase sqdb;
 
     public String getDate(){
         // date format DD/MM/YYYY
@@ -82,6 +87,34 @@ public class Request {
     }
     public void setId(int id){
         this.request_id = id;
+    }
+
+    public void setMydb(Context context){
+        this.mydb = new DBHelper(context);
+    }
+
+    public Bitmap getUserImage(){
+        User user = null;
+        this.sqdb = this.mydb.getWritableDatabase();
+        user = this.mydb.getUserById(this.student_id);
+        this.sqdb.close();
+        return user.getImage();
+    }
+
+    public String getUserUsername(){
+        User user = null;
+        this.sqdb = this.mydb.getWritableDatabase();
+        user = this.mydb.getUserById(this.student_id);
+        this.sqdb.close();
+        return user.getUsername();
+    }
+
+    public String getUserPhoneNumber(){
+        User user = null;
+        this.sqdb = this.mydb.getWritableDatabase();
+        user = this.mydb.getUserById(this.student_id);
+        this.sqdb.close();
+        return user.getPhone();
     }
 
     @Override

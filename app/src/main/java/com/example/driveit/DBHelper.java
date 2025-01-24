@@ -236,6 +236,35 @@ public class DBHelper extends SQLiteOpenHelper {
         return s_id;
     }
 
+    public int searchUserIdByEmail(String email){
+        Cursor c;
+        int s_id=0;
+        User user = null;
+        sqdb=getWritableDatabase();
+        c=sqdb.query(TABLE_NAME, null, USERNAME+"=?", new String[]{email}, null, null, null);
+        int col_id = c.getColumnIndex(KEY_ID);
+        int col1=c.getColumnIndex(USERNAME);
+        int col2=c.getColumnIndex(PASSWORD);
+        int col3=c.getColumnIndex(EMAIL);
+        int col4=c.getColumnIndex(PHONE);
+        int col5=c.getColumnIndex(PICTURE);
+        int col6=c.getColumnIndex(ISTEACHER);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            s_id = c.getInt(col_id);
+            String s1 = c.getString(col1);
+            String s2 = c.getString(col2);
+            String s3 = c.getString(col3);
+            String s4 = c.getString(col4);
+            Bitmap image = getPicture(c.getBlob(col5));
+            int s6 = c.getInt(col6);
+            user = new User(s1, s2, s3, s4, image, s6);
+            c.moveToNext();
+        }
+        sqdb.close();
+        return s_id;
+    }
+
     public User getUserById(int id){
         Cursor c;
         User user = null;
