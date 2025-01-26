@@ -17,6 +17,12 @@ TODO:
         - find user by Id (DBHelper)
         - find teacher by Id (DBHelper)
         - list all teachers (DBHelper)
+	- list all requests (DBHelper)
     - activities needed
         - list teachers activity (ListView, teacherAdapter)
         - Request list activity (ListView, requestAdapter)
+
+Added most of those things, one thing left, which is the timestamp and the logic behind it.
+One way is to use the Timestamp class, which uses the amount of milliseconds from 1970.
+Then, when a user creates a request, the timestamp in the db will contain the amount of milliseconds from 1970.
+and every time a user signs in, there is a system that will check the requests, and if a request is outdated, the function removes it.(This is necessary because the application is local and not online).
