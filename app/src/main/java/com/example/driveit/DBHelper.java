@@ -126,6 +126,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
+    public void validateRequests(){
+        // getting all the requests
+
+    }
+
     public void insert(User user){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -162,7 +167,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
-    public ArrayList<Request> getAllTeacherRequests(int id){
+    public ArrayList<Request> getAllTeacherRequests(int id, Context context){
         Cursor c;
         ArrayList<Request> requestArr = new ArrayList<>();
         sqdb = getWritableDatabase();
@@ -180,6 +185,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String request_timestamp = c.getString(timestamp_col);
             String request_status = c.getString(status_col);
             Request request = new Request(request_id, request_student_id, request_teacher_id, request_timestamp, request_status);
+            request.setMydb(context);
             requestArr.add(request);
             c.moveToNext();
         }

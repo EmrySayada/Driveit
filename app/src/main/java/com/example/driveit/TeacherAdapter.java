@@ -72,6 +72,7 @@ public class TeacherAdapter extends ArrayAdapter<Teacher> {
             @Override
             public void onClick(View v) {
                 Request r = new Request(studentId, getItem(position).getId());
+                r.setMydb(context);
                 DBHelper mydb = new DBHelper(context);
                 SQLiteDatabase sqdb = mydb.getWritableDatabase();
                 mydb.insertRequest(r);

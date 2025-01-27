@@ -1,6 +1,7 @@
 package com.example.driveit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class TeacherActivity extends AppCompatActivity {
-    Button teacherSignOutBtn;
+    Button teacherSignOutBtn, requestViewBtn;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
 
@@ -39,10 +40,18 @@ public class TeacherActivity extends AppCompatActivity {
                 finish();
             }
         });
+        requestViewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeacherActivity.this, RequestActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void init(){
         teacherSignOutBtn = findViewById(R.id.teacherSignOutBtn);
+        requestViewBtn = findViewById(R.id.requestViewBtn);
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
         editor = sp.edit();
     }

@@ -93,25 +93,19 @@ public class Request {
 
     public Bitmap getUserImage(){
         User user = null;
-        this.sqdb = this.mydb.getWritableDatabase();
         user = this.mydb.getUserById(this.student_id);
-        this.sqdb.close();
         return user.getImage();
     }
 
     public String getUserUsername(){
         User user = null;
-        this.sqdb = this.mydb.getWritableDatabase();
         user = this.mydb.getUserById(this.student_id);
-        this.sqdb.close();
         return user.getUsername();
     }
 
     public String getUserPhoneNumber(){
         User user = null;
-        this.sqdb = this.mydb.getWritableDatabase();
         user = this.mydb.getUserById(this.student_id);
-        this.sqdb.close();
         return user.getPhone();
     }
 
