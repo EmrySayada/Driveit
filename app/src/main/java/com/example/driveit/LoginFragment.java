@@ -46,7 +46,6 @@ public class LoginFragment extends Fragment {
                 if(InputCheckSystem.checkAllFieldLogin(v.getContext(), etEmailLogin, etPasswordLogin)){
                     String email = etEmailLogin.getText().toString();
                     String password = etPasswordLogin.getText().toString();
-
                     sqdb = mydb.getWritableDatabase();
                     boolean isTeacher = mydb.isTeacherInDB(email, password);
                     if(mydb.userExists(email, password)){
@@ -75,7 +74,6 @@ public class LoginFragment extends Fragment {
         editor=sp.edit();
         mydb = new DBHelper(getActivity());
         sqdb = mydb.getWritableDatabase();
-
         sqdb.close();
     }
 

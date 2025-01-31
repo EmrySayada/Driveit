@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Request {
     private int request_id;
@@ -18,8 +19,12 @@ public class Request {
 
     public String getDate(){
         // date format DD/MM/YYYY
+        // when ever it checks for the date it should convert it to a date object.
+        timestamp="";
         Calendar cld = Calendar.getInstance();
-        timestamp = cld.toString();
+        timestamp += cld.get(Calendar.DAY_OF_MONTH)+"/";
+        timestamp += cld.get(Calendar.MONTH)+"/";
+        timestamp += cld.get(Calendar.YEAR);
         return timestamp;
     }
 
@@ -107,6 +112,18 @@ public class Request {
         User user = null;
         user = this.mydb.getUserById(this.student_id);
         return user.getPhone();
+    }
+
+    public boolean isValid(){
+        // find the date of 30 days ago
+        Calendar cld = Calendar.getInstance();
+        cld.add(Calendar.DAY_OF_YEAR, -30);
+        Date deadline = cld.getTime();
+        String [] date = timestamp.split("/");
+        Calendar requestDate = Calendar.getInstance();
+        requestDate.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]));
+        return requestDate.before(deadline);
+
     }
 
 

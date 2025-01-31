@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -126,10 +127,29 @@ public class DBHelper extends SQLiteOpenHelper {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
-    public void validateRequests(){
-        // getting all the requests
-
+    public void deleteUser(User userToDelete){
+        sqdb=getWritableDatabase();
+        sqdb.delete(TABLE_NAME,USERNAME+"=? AND "+PASSWORD+"=?", new String[]{userToDelete.getUsername(), userToDelete.getPassword()});
+        sqdb.close();
     }
+
+    public void deleteRequest(Request r){
+        sqdb = getWritableDatabase();
+        sqdb.delete(REQUEST_TABLE_NAME, REQUEST_KEY_ID+"=?", new String[]{String.valueOf(r.getId())});
+        sqdb.close();
+    }
+
+    public void validateRequests(int id, Context context){
+        // getting all the requests of a teacher.
+        ArrayList<Request> requestArr = getAllTeacherRequests(id, context);
+        for(int i=0; i<requestArr.size(); i++){
+            if(requestArr.get(i).isValid()){
+                deleteRequest(requestArr.get(i));
+            }
+        }
+    }
+
+
 
     public void insert(User user){
         sqdb = getWritableDatabase();
@@ -327,11 +347,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return arrUsers;
     }
 
-    public void deleteUser(User userToDelete){
-        sqdb=getWritableDatabase();
-        sqdb.delete(TABLE_NAME,USERNAME+"=? AND "+PASSWORD+"=?", new String[]{userToDelete.getUsername(), userToDelete.getPassword()});
-        sqdb.close();
-    }
+
 
     public void updateUser(User oldUser, User newUser){
         sqdb=getWritableDatabase();

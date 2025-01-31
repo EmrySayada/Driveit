@@ -17,6 +17,7 @@ public class TeacherActivity extends AppCompatActivity {
     Button teacherSignOutBtn, requestViewBtn;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
+    DBHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class TeacherActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        mydb.validateRequests(sp.getInt("userId", 0), this);
     }
 
     public void init(){
@@ -54,5 +56,6 @@ public class TeacherActivity extends AppCompatActivity {
         requestViewBtn = findViewById(R.id.requestViewBtn);
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
         editor = sp.edit();
+        mydb = new DBHelper(this);
     }
 }

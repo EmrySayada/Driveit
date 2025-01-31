@@ -37,7 +37,6 @@ public class RequestAdapter extends ArrayAdapter<Request> {
 
     @Override
     public View getView(int position, @NonNull android.view.View convertView, @NonNull android.view.ViewGroup parent){
-
         student_name = getItem(position).getUserUsername();
         phone_number = getItem(position).getUserPhoneNumber();
         image = getItem(position).getUserImage();
