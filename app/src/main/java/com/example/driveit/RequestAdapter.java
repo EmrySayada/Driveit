@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ public class RequestAdapter extends ArrayAdapter<Request> {
         ImageView studentPic;
         TextView studentName;
         Button callBtn;
+        ImageButton rejectBtn, approveBtn;
     }
 
     @Override
@@ -48,6 +50,8 @@ public class RequestAdapter extends ArrayAdapter<Request> {
             holder.studentPic = convertView.findViewById(R.id.studentPic);
             holder.studentName = convertView.findViewById(R.id.studentName);
             holder.callBtn = convertView.findViewById(R.id.callBtn);
+            holder.rejectBtn = convertView.findViewById(R.id.rejectBtn);
+            holder.approveBtn = convertView.findViewById(R.id.approveBtn);
             convertView.setTag(holder);
         }else{
             holder=(ViewHolder) convertView.getTag();
@@ -60,6 +64,19 @@ public class RequestAdapter extends ArrayAdapter<Request> {
                 String tel = "tel:" + phone_number;
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
                 context.startActivity(intent);
+            }
+        });
+        holder.approveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getItem(position).acceptRequest();
+            }
+        });
+        holder.rejectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getItem(position).rejectRequest();
+
             }
         });
         return convertView;

@@ -191,7 +191,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor c;
         ArrayList<Request> requestArr = new ArrayList<>();
         sqdb = getWritableDatabase();
-        c = sqdb.query(REQUEST_TABLE_NAME, null, REQUEST_TEACHER_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+        c = sqdb.query(REQUEST_TABLE_NAME, null, REQUEST_TEACHER_ID+"=? AND "+REQUEST_STATUS+"=?", new String[]{String.valueOf(id), "Pending"}, null, null, null);
         int request_id_col = c.getColumnIndex(REQUEST_KEY_ID);
         int student_id_col = c.getColumnIndex(REQUEST_STUDENT_ID);
         int teacher_id_col = c.getColumnIndex(REQUEST_TEACHER_ID);
@@ -358,6 +358,17 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(PHONE, newUser.getPhone());
         cv.put(PICTURE, getBytes(newUser.getImage()));
         sqdb.update(TABLE_NAME, cv, USERNAME+"=? AND "+PASSWORD+"=?", new String[]{oldUser.getUsername(), oldUser.getPassword()});
+        sqdb.close();
+    }
+
+    public void approveRequestDB(int requestId,int studentId, int teacherId){
+        sqdb = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(CURRENTTEACHERID, teacherId);
+        sqdb.update(TABLE_NAME, cv, KEY_ID+"=?", new String[]{String.valueOf(studentId)});
+        ContentValues cv2 = new ContentValues();
+        cv2.put(REQUEST_STATUS, "Approved");
+        sqdb.update(REQUEST_TABLE_NAME, cv2, REQUEST_KEY_ID+"=?", new String[]{String.valueOf(requestId)});
         sqdb.close();
     }
 

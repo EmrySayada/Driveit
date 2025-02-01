@@ -126,6 +126,13 @@ public class Request {
 
     }
 
+    public void acceptRequest(){
+        this.mydb.approveRequestDB(request_id,student_id, teacher_id);
+    }
+    public void rejectRequest(){
+        this.mydb.deleteRequest(this);
+    }
+
 
     @Override
     public String toString(){
