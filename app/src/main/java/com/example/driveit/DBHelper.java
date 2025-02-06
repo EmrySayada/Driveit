@@ -15,6 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * @author Emry Sayada
+ * A class that communicates the db
+ */
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DBName = "users.db";
@@ -49,7 +53,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String REQUEST_TIMESTAMP = "timestamp";
     public static final String REQUEST_STATUS = "status";
 
-
+    // lesson tbale
+    public static final String LESSON_TABLE_NAME = "lessons";
+    public static final String LESSON_KEY_ID = "_id_lesson";
+    public static final String LESSON_STUDENT_ID = "student_id";
+    public static final String LESSON_TEACHER_ID = "teacher_id";
+    public static final String LESSON_DATE = "date";
+    public static final String LESSON_GPS = "gps";
+    public static final String LESSON_FEEDBACK = "feedback";
 
 
     //TODO add variables to another sql table
@@ -66,11 +77,21 @@ public class DBHelper extends SQLiteOpenHelper {
     private String SQL_Request_Create = "";
     private String SQL_Request_Delete = "";
 
+    // lesson table create/delete
+    private String SQL_Lesson_Create = "";
+    private String SQL_Lesson_Delete = "";
 
+    /**
+     * constructor for the class
+     * @param context
+     */
     public DBHelper(@Nullable Context context){super(context, DBName, null, DBVERSION);}
 
 
-    // function that creates the tables
+    /**
+     * function that creates all the required tables in the database
+     * @param db The database.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         SQL_Create = "CREATE TABLE " + TABLE_NAME + " (";
@@ -102,8 +123,23 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Request_Create += REQUEST_TIMESTAMP + " TEXT, ";
         SQL_Request_Create += REQUEST_STATUS + " TEXT);";
         db.execSQL(SQL_Request_Create);
+
+        SQL_Lesson_Create = "CREATE TABLE " + LESSON_TABLE_NAME + " (";
+        SQL_Lesson_Create += LESSON_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, ";
+        SQL_Lesson_Create += LESSON_STUDENT_ID + " INTEGER, ";
+        SQL_Lesson_Create += LESSON_TEACHER_ID + " INTEGER, ";
+        SQL_Lesson_Create += LESSON_DATE + " TEXT, ";
+        SQL_Lesson_Create += LESSON_GPS + " TEXT, ";
+        SQL_Lesson_Create += LESSON_FEEDBACK + "TEXT);";
+        db.execSQL(SQL_Lesson_Create);
     }
 
+    /**
+     * updates the database
+     * @param db The database.
+     * @param oldVersion The old database version.
+     * @param newVersion The new database version.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         SQL_Delete="DROP TABLE IF EXISTS "+TABLE_NAME;
@@ -114,31 +150,57 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQL_Request_Delete = "DROP TABLE IF EXISTS " + REQUEST_TABLE_NAME;
         db.execSQL(SQL_Request_Delete);
+
+        SQL_Lesson_Delete = "DROP TABLE IF EXISTS " + LESSON_TABLE_NAME;
+        db.execSQL(SQL_Lesson_Delete);
         onCreate(db);
     }
 
+    /**
+     * convert the image to a byte array
+     * @param bitmap
+     * @return image in a byte array
+     */
     public byte[] getBytes(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
     }
 
+    /**
+     * converts byte array to bitmap image
+     * @param image
+     * @return bitmap image
+     */
     public Bitmap getPicture(byte[] image){
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
+    /**
+     * function that deletes a user
+     * @param userToDelete
+     */
     public void deleteUser(User userToDelete){
         sqdb=getWritableDatabase();
         sqdb.delete(TABLE_NAME,USERNAME+"=? AND "+PASSWORD+"=?", new String[]{userToDelete.getUsername(), userToDelete.getPassword()});
         sqdb.close();
     }
 
+    /**
+     * function that deletes a request
+     * @param r
+     */
     public void deleteRequest(Request r){
         sqdb = getWritableDatabase();
         sqdb.delete(REQUEST_TABLE_NAME, REQUEST_KEY_ID+"=?", new String[]{String.valueOf(r.getId())});
         sqdb.close();
     }
 
+    /**
+     * a function that checks the validity of a request (past 30 days)
+     * @param id
+     * @param context
+     */
     public void validateRequests(int id, Context context){
         // getting all the requests of a teacher.
         ArrayList<Request> requestArr = getAllTeacherRequests(id, context);
@@ -150,7 +212,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
+    /**
+     * function that inserts a new user to the database
+     * @param user
+     */
     public void insert(User user){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -165,6 +230,10 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    /**
+     * function that inserts a teacher to the database
+     * @param teacher
+     */
     public void insertTeacher(Teacher teacher){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -176,6 +245,10 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    /**
+     * function that inserts a request to the database
+     * @param r
+     */
     public void insertRequest(Request r){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -187,6 +260,59 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    /**
+     * function that insert lesson into the database
+     * @param l
+     */
+    public void insertLesson(Lesson l){
+        sqdb = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(LESSON_STUDENT_ID, l.getStudentId());
+        cv.put(LESSON_TEACHER_ID, l.getTeacherId());
+        cv.put(LESSON_DATE, l.getDate());
+        cv.put(LESSON_GPS, l.getGps());
+        cv.put(LESSON_FEEDBACK, l.getFeedback());
+        sqdb.insert(LESSON_TABLE_NAME, null, cv);
+        sqdb.close();
+    }
+
+    /**
+     * function that find all the users lessons
+     * @param id
+     * @return lessonArr
+     */
+    public ArrayList<Lesson> getAllUserLessons(int id){
+        Cursor c;
+        ArrayList<Lesson> lessonArr = new ArrayList<>();
+        sqdb = getWritableDatabase();
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_STUDENT_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+        int lesson_id_col = c.getColumnIndex(LESSON_KEY_ID);
+        int student_id_col = c.getColumnIndex(LESSON_STUDENT_ID);
+        int teacher_id_col = c.getColumnIndex(LESSON_TEACHER_ID);
+        int date_col = c.getColumnIndex(LESSON_DATE);
+        int gps_col = c.getColumnIndex(LESSON_GPS);
+        int feedback_col = c.getColumnIndex(LESSON_FEEDBACK);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            int lesson_id = c.getInt(lesson_id_col);
+            int student_id = c.getInt(student_id_col);
+            int teacher_id= c.getInt(teacher_id_col);
+            String date = c.getString(date_col);
+            String gps = c.getString(gps_col);
+            String feedback = c.getString(feedback_col);
+            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, date, gps, feedback);
+            lessonArr.add(lesson);
+            c.moveToNext();
+        }
+        return lessonArr;
+    }
+
+    /**
+     * function that gets all the teacher requests
+     * @param id
+     * @param context
+     * @return requestArr
+     */
     public ArrayList<Request> getAllTeacherRequests(int id, Context context){
         Cursor c;
         ArrayList<Request> requestArr = new ArrayList<>();
@@ -213,6 +339,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return requestArr;
     }
 
+    /**
+     * function that checks if a user exists
+     * @param email
+     * @param password
+     * @return if the user exists
+     */
     public boolean userExists(String email, String password){
         Cursor c;
         sqdb = getWritableDatabase();
@@ -232,6 +364,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    /**
+     * function that find the user Id in the database
+     * @param username
+     * @param phone
+     * @return userId
+     */
     public int searchUserId(String username, String phone){
         Cursor c;
         int s_id=0;
@@ -261,6 +399,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return s_id;
     }
 
+    /**
+     * function the find the user Id
+     * @param email
+     * @return userId
+     */
     public int searchUserIdByEmail(String email){
         Cursor c;
         int s_id=0;
@@ -290,6 +433,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return s_id;
     }
 
+    /**
+     * function that gets the user by its id
+     * @param id
+     * @return user
+     */
     public User getUserById(int id){
         Cursor c;
         User user = null;
@@ -317,7 +465,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return user;
     }
 
-
+    /**
+     * function the gets all the users in the database
+     * @return arrayList of users
+     */
     public ArrayList<User> getAllUsers(){
         Cursor c;
         ArrayList<User> arrUsers = new ArrayList<>();
@@ -348,7 +499,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
+    /**
+     * function that updates the user information in the database
+     * @param oldUser
+     * @param newUser
+     */
     public void updateUser(User oldUser, User newUser){
         sqdb=getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -361,6 +516,12 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    /**
+     * function that approves a request
+     * @param requestId
+     * @param studentId
+     * @param teacherId
+     */
     public void approveRequestDB(int requestId,int studentId, int teacherId){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -372,7 +533,12 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
-
+    /**
+     * function that check if a user is a teacher
+     * @param email
+     * @param password
+     * @return isTeacher
+     */
     public boolean isTeacherInDB(String email, String password){
         Cursor c;
         User user = null;
@@ -406,6 +572,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    /**
+     * function that gets all the teacher in the database
+     * @return ArrayList of teachers
+     */
     public ArrayList<Teacher> getAllTeachers(){
         // function loops through the teacher table and uses the teacher id to find the user information in the users table.
         Cursor c;
@@ -433,6 +603,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return arrTeachers;
     }
 
+    /**
+     * function that checks if a user is without a teacher
+     * @param email
+     * @return isWithoutTeacher
+     */
     public boolean isWithoutTeacher(String email){
         Cursor c;
         int current_teacher_id_final = 0;

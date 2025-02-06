@@ -15,6 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
+/**
+ * @author Emry Sayada
+ * class that houses all the fragemts
+ */
 public class Start extends AppCompatActivity {
 
 //    Button btnLogin, btnRegister;
@@ -25,6 +29,13 @@ public class Start extends AppCompatActivity {
     LoginFragment loginFragment;
     RegisterFragment registerFragment;
 
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +49,9 @@ public class Start extends AppCompatActivity {
         init();
     }
 
+    /**
+     * function that initializes the activity
+     */
     public void init(){
         vp2 = findViewById(R.id.vp2);
         adapter = new ViewPagerAdapter(this);

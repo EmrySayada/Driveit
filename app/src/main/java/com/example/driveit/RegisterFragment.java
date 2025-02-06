@@ -32,6 +32,10 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
+/**
+ * class that holds the code for the register fragment
+ * @author Emry Sayada
+ */
 public class RegisterFragment extends Fragment {
     Button conBtnReg;
     ToggleButton isTeacherBtn;
@@ -48,7 +52,18 @@ public class RegisterFragment extends Fragment {
     ActivityResultLauncher<Intent> arlPhoto;
     ActivityResultLauncher<String> arlGallery;
 
-
+    /**
+     * function that creates the fragment
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,6 +141,10 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
+    /**
+     * function that handles the process of choosing a profile picture
+     * building the dialog, and creating the necessary intents
+     */
     private void chooseImage() {
         final CharSequence[] options = {"Take photo", "Choose from Gallery", "Exit"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -145,6 +164,10 @@ public class RegisterFragment extends Fragment {
         builder.show();
     }
 
+    /**
+     * function that initializes all the elements
+     * @param view
+     */
     public void init(View view){
         conBtnReg = view.findViewById(R.id.conBtnReg);
         usernameEtReg = view.findViewById(R.id.usernameEtReg);

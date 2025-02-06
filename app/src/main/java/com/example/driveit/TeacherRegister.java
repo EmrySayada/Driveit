@@ -30,6 +30,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * @author Emry Sayada
+ */
 public class TeacherRegister extends AppCompatActivity {
 
     EditText etTeacherExp;
@@ -45,7 +48,13 @@ public class TeacherRegister extends AppCompatActivity {
     BufferedReader br;
     String region;
 
-
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,9 +100,11 @@ public class TeacherRegister extends AppCompatActivity {
             }
         });
         // when the user finishes the signing up steps, the activity closes, and the user has to log in again.
-
     }
 
+    /**
+     * function that reads from a file and adds them to an array
+     */
     public void goReadFromFile(){
         is=this.getResources().openRawResource(R.raw.regions);
         isr=new InputStreamReader(is);
@@ -111,6 +122,9 @@ public class TeacherRegister extends AppCompatActivity {
 
     }
 
+    /**
+     * function that initializes all the elements in the activity
+     */
     public void init(){
         etTeacherExp = findViewById(R.id.etTeacherExp);
         mydb = new DBHelper(this);

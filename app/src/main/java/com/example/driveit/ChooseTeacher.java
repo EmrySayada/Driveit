@@ -15,6 +15,11 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * @author Emry Sayada
+ * An acitivy where a user can choose a teacher
+ */
+
 public class ChooseTeacher extends AppCompatActivity {
     // this activity will launch when a user first signs in, if the teacher_id = 0;
     ListView lv;
@@ -23,6 +28,14 @@ public class ChooseTeacher extends AppCompatActivity {
     DBHelper mydb;
     SQLiteDatabase sqdb;
     SharedPreferences sp;
+
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +52,19 @@ public class ChooseTeacher extends AppCompatActivity {
 
     }
 
+    /**
+     * function that initializes all the element of the activity
+     */
     public void init(){
         lv = findViewById(R.id.lv);
         mydb = new DBHelper(this);
         arrTeachers = new ArrayList<>();
         sp = getSharedPreferences("PREFS_FILE", MODE_PRIVATE);
     }
+
+    /**
+     * function that create the list of the teachers
+     */
     public void createListOfTeachers(){
         int id = sp.getInt("userId", 0);
         arrTeachers.clear();

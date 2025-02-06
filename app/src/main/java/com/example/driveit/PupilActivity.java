@@ -17,17 +17,24 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
+/**
+ * class that holds that pupil activity
+ * @author Emry Sayada
+ */
 public class PupilActivity extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     Button pupilSignOutBtn;
-//    ListView lv;
-//    ArrayList<Teacher> arrTeachers;
-//    TeacherAdapter adapter;
     DBHelper mydb;
     SQLiteDatabase sqdb;
 
-
+    /**
+     * function that create the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,19 +64,14 @@ public class PupilActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * function that initializes all the elements
+     */
     public void init(){
         pupilSignOutBtn = findViewById(R.id.pupilSignOutBtn);
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
-//        lv = findViewById(R.id.lv);
         mydb = new DBHelper(this);
-//        arrTeachers = new ArrayList<>();
         editor = sp.edit();
     }
 
-//    public void createListOfTeachers(){
-//        arrTeachers.clear();
-//        arrTeachers=mydb.getAllTeachers();
-//        adapter = new TeacherAdapter(this, R.layout.list_teachers, arrTeachers);
-//        lv.setAdapter(adapter);
-//    }
 }

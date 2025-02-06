@@ -15,6 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
+/**
+ * @author Emry Sayada
+ * class that holds the code for the request activity
+ */
 public class RequestActivity extends AppCompatActivity {
     ListView requestLv;
     ArrayList<Request> arrRequest;
@@ -23,7 +27,13 @@ public class RequestActivity extends AppCompatActivity {
     SQLiteDatabase sqdb;
     SharedPreferences sp;
 
-
+    /**
+     * function that create the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +49,19 @@ public class RequestActivity extends AppCompatActivity {
         createListOfRequests();
     }
 
+    /**
+     * function that initializes the elements
+     */
     public void init(){
         requestLv = findViewById(R.id.requestLv);
         sp = getSharedPreferences("PREFS_FILE", MODE_PRIVATE);
         mydb = new DBHelper(this);
         arrRequest = new ArrayList<>();
     }
+
+    /**
+     * function that creates the request list and attaches it to the UI
+     */
     public void createListOfRequests(){
         String email = sp.getString("email", "");
         int id = mydb.searchUserIdByEmail(email);
