@@ -1,5 +1,7 @@
 package com.example.driveit;
 
+import java.util.Calendar;
+
 /**
  * @author Emry Sayada
  * This class orgenizes all the information available for a certian lesson
@@ -8,24 +10,36 @@ public class Lesson {
     private int lessonId;
     private int studentId;
     private int teacherId;
-    private String date;
+    private String type;
+    private String timestamp;
     private String gps;
     private String feedback;
+
+    public String getDate(){
+        timestamp="";
+        Calendar cld = Calendar.getInstance();
+        timestamp += cld.get(Calendar.DAY_OF_MONTH)+"/";
+        timestamp += cld.get(Calendar.MONTH)+"/";
+        timestamp += cld.get(Calendar.YEAR);
+        return timestamp;
+    }
 
     /**
      * constructor for the lesson object
      * @param lessonId
      * @param studentId
      * @param teacherId
-     * @param date
+     * @param timestamp
      * @param gps
      * @param feedback
+     * @param type
      */
-    public Lesson(int lessonId, int studentId, int teacherId, String date, String gps, String feedback){
+    public Lesson(int lessonId, int studentId, int teacherId, String type,String timestamp, String gps, String feedback){
         this.lessonId = lessonId;
         this.studentId = studentId;
         this.teacherId = teacherId;
-        this.date = date;
+        this.type = type;
+        this.timestamp = timestamp;
         this.gps = gps;
         this.feedback = feedback;
     }
@@ -38,7 +52,7 @@ public class Lesson {
         this.lessonId = other.lessonId;
         this.studentId = other.studentId;
         this.teacherId = other.teacherId;
-        this.date = other.date;
+        this.timestamp = other.timestamp;
         this.gps = other.gps;
         this.feedback = other.feedback;
     }
@@ -92,19 +106,35 @@ public class Lesson {
     }
 
     /**
+     * getter for type
+     * @return
+     */
+    public String getType(){
+        return this.type;
+    }
+
+    /**
+     * setter for type
+     * @param type
+     */
+    public void setType(String type){
+        this.type = type;
+    }
+
+    /**
      * getter for the date of the lesson
      * @return date
      */
-    public String getDate() {
-        return date;
+    public String getTimestamp() {
+        return timestamp;
     }
 
     /**
      * setter for the date of the lesson
-     * @param date
+     * @param timestamp
      */
-    public void setDate(String date) {
-        this.date = date;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     /**
@@ -148,7 +178,7 @@ public class Lesson {
         return "lessonId: "+this.lessonId+
                 "\nstudentId: "+this.studentId+
                 "\nteacherId: "+this.teacherId+
-                "\ndate: "+this.date+
+                "\ndate: "+this.timestamp+
                 "\ngps: "+this.gps+
                 "\nfeedback: "+this.feedback;
     }

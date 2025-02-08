@@ -58,6 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LESSON_KEY_ID = "_id_lesson";
     public static final String LESSON_STUDENT_ID = "student_id";
     public static final String LESSON_TEACHER_ID = "teacher_id";
+    public static final String LESSON_TYPE = "type";
     public static final String LESSON_DATE = "date";
     public static final String LESSON_GPS = "gps";
     public static final String LESSON_FEEDBACK = "feedback";
@@ -128,6 +129,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Lesson_Create += LESSON_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, ";
         SQL_Lesson_Create += LESSON_STUDENT_ID + " INTEGER, ";
         SQL_Lesson_Create += LESSON_TEACHER_ID + " INTEGER, ";
+        SQL_Lesson_Create += LESSON_TYPE + " TEXT, ";
         SQL_Lesson_Create += LESSON_DATE + " TEXT, ";
         SQL_Lesson_Create += LESSON_GPS + " TEXT, ";
         SQL_Lesson_Create += LESSON_FEEDBACK + "TEXT);";
@@ -269,7 +271,8 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(LESSON_STUDENT_ID, l.getStudentId());
         cv.put(LESSON_TEACHER_ID, l.getTeacherId());
-        cv.put(LESSON_DATE, l.getDate());
+        cv.put(LESSON_TYPE, l.getType());
+        cv.put(LESSON_DATE, l.getTimestamp());
         cv.put(LESSON_GPS, l.getGps());
         cv.put(LESSON_FEEDBACK, l.getFeedback());
         sqdb.insert(LESSON_TABLE_NAME, null, cv);
@@ -289,6 +292,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int lesson_id_col = c.getColumnIndex(LESSON_KEY_ID);
         int student_id_col = c.getColumnIndex(LESSON_STUDENT_ID);
         int teacher_id_col = c.getColumnIndex(LESSON_TEACHER_ID);
+        int type_col = c.getColumnIndex(LESSON_TYPE);
         int date_col = c.getColumnIndex(LESSON_DATE);
         int gps_col = c.getColumnIndex(LESSON_GPS);
         int feedback_col = c.getColumnIndex(LESSON_FEEDBACK);
@@ -297,10 +301,11 @@ public class DBHelper extends SQLiteOpenHelper {
             int lesson_id = c.getInt(lesson_id_col);
             int student_id = c.getInt(student_id_col);
             int teacher_id= c.getInt(teacher_id_col);
+            String type = c.getString(type_col);
             String date = c.getString(date_col);
             String gps = c.getString(gps_col);
             String feedback = c.getString(feedback_col);
-            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, date, gps, feedback);
+            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, type ,date, gps, feedback);
             lessonArr.add(lesson);
             c.moveToNext();
         }
