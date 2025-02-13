@@ -21,6 +21,8 @@ public class Lesson {
         timestamp += cld.get(Calendar.DAY_OF_MONTH)+"/";
         timestamp += cld.get(Calendar.MONTH)+"/";
         timestamp += cld.get(Calendar.YEAR);
+        timestamp += " "+cld.get(Calendar.HOUR)+":";
+        timestamp += cld.get(Calendar.MINUTE);
         return timestamp;
     }
 
@@ -55,6 +57,20 @@ public class Lesson {
         this.timestamp = other.timestamp;
         this.gps = other.gps;
         this.feedback = other.feedback;
+    }
+
+    /**
+     * constructor for default lesson
+     * @param studentId
+     * @param teacherId
+     * @param type
+     */
+    public Lesson(int studentId, int teacherId, String type){
+        this.studentId = studentId;
+        this.teacherId = teacherId;
+        this.type = type;
+        this.timestamp = getDate();
+        this.feedback = "No feedback yet!";
     }
 
     /**
@@ -123,7 +139,7 @@ public class Lesson {
 
     /**
      * getter for the date of the lesson
-     * @return date
+     * @return timestamp
      */
     public String getTimestamp() {
         return timestamp;
