@@ -48,6 +48,7 @@ public class TeacherActivity extends AppCompatActivity {
                 editor.putString("password", "");
                 editor.putBoolean("isConnected", false);
                 editor.putBoolean("isTeacher", false);
+                editor.putInt("userId", 0);
                 editor.commit();
                 finish();
             }

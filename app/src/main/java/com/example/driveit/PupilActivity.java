@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,9 @@ public class PupilActivity extends AppCompatActivity {
     Button pupilSignOutBtn;
     DBHelper mydb;
     SQLiteDatabase sqdb;
+    ImageView pupilPic;
+    TextView greetingTv, pupilNameTv;
+    User user;
 
     /**
      * function that create the activity
@@ -50,6 +55,11 @@ public class PupilActivity extends AppCompatActivity {
             Intent intent = new Intent(PupilActivity.this, ChooseTeacher.class);
             startActivity(intent);
         }
+        user = mydb.getUserById(sp.getInt("userId", 0));
+        pupilNameTv.setText("test");
+        pupilPic.setImageBitmap(user.getImage());
+
+
 
         pupilSignOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +68,7 @@ public class PupilActivity extends AppCompatActivity {
                 editor.putString("password", "");
                 editor.putBoolean("isConnected", false);
                 editor.putBoolean("isTeacher", false);
+                editor.putInt("userId", 0);
                 editor.commit();
                 finish();
             }
@@ -72,6 +83,9 @@ public class PupilActivity extends AppCompatActivity {
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
         mydb = new DBHelper(this);
         editor = sp.edit();
+        pupilPic = findViewById(R.id.pupilPic);
+        greetingTv = findViewById(R.id.greetingTv);
+        pupilNameTv = findViewById(R.id.pupilNameTv);
     }
 
 }
