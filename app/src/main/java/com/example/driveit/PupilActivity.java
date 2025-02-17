@@ -84,7 +84,7 @@ public class PupilActivity extends AppCompatActivity {
         mydb = new DBHelper(this);
         editor = sp.edit();
         pupilPic = findViewById(R.id.pupilPic);
-        greetingTv = findViewById(R.id.greetingTv);
+//        greetingTv = findViewById(R.id.greetingTv);
         pupilNameTv = findViewById(R.id.pupilNameTv);
     }
 
