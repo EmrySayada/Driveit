@@ -5,13 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.Calendar;
 
 /**
  * @author Emry Sayada
@@ -22,6 +28,11 @@ public class TeacherActivity extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     DBHelper mydb;
+    Window window;
+    TextView greetingTvTeacher, teacherNameTv;
+    ImageView teacherPic;
+    User user;
+    Calendar cld;
 
     /**
      * function that creates the activity
@@ -41,6 +52,17 @@ public class TeacherActivity extends AppCompatActivity {
             return insets;
         });
         init();
+        int time = cld.get(Calendar.HOUR_OF_DAY);
+        user = mydb.getUserById(sp.getInt("userId", 0));
+        teacherPic.setImageBitmap(user.getImage());
+        teacherNameTv.setText(user.getUsername());
+        if(time < 12 && time > 0){
+            greetingTvTeacher.setText("Good Morning,");
+        }else if(time >= 12 && time < 18){
+            greetingTvTeacher.setText("Good Afternoon,");
+        }else{
+            greetingTvTeacher.setText("Good Night,");
+        }
         teacherSignOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,5 +94,11 @@ public class TeacherActivity extends AppCompatActivity {
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
         editor = sp.edit();
         mydb = new DBHelper(this);
+        window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.mainColor));
+        greetingTvTeacher = findViewById(R.id.greetingTvTeacher);
+        teacherNameTv = findViewById(R.id.teacherNameTv);
+        teacherPic = findViewById(R.id.teacherPic);
+        cld = Calendar.getInstance();
     }
 }

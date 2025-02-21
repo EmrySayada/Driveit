@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -13,11 +14,13 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * class that holds that pupil activity
@@ -32,6 +35,8 @@ public class PupilActivity extends AppCompatActivity {
     ImageView pupilPic;
     TextView greetingTv, pupilNameTv;
     User user;
+    Calendar cld;
+    Window window;
 
     /**
      * function that create the activity
@@ -56,7 +61,15 @@ public class PupilActivity extends AppCompatActivity {
             startActivity(intent);
         }
         user = mydb.getUserById(sp.getInt("userId", 0));
-        pupilNameTv.setText("test");
+        int time = cld.get(Calendar.HOUR_OF_DAY);
+        if(time < 12 && time > 0){
+            greetingTv.setText("Good Morning,");
+        }else if(time >= 12 && time < 18){
+            greetingTv.setText("Good Afternoon,");
+        }else{
+            greetingTv.setText("Good Night,");
+        }
+        pupilNameTv.setText(user.getUsername());
         pupilPic.setImageBitmap(user.getImage());
 
 
@@ -84,8 +97,11 @@ public class PupilActivity extends AppCompatActivity {
         mydb = new DBHelper(this);
         editor = sp.edit();
         pupilPic = findViewById(R.id.pupilPic);
-//        greetingTv = findViewById(R.id.greetingTv);
+        greetingTv = findViewById(R.id.greetingTv);
         pupilNameTv = findViewById(R.id.pupilNameTv);
+        cld = Calendar.getInstance();
+        window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.mainColor));
     }
 
 }
