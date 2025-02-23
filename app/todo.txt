@@ -1,28 +1,12 @@
 TODO:
-    - if the user has no current teacher (current_teacher_id = 0)
-    - move them to an activity where all the available teachers are listed
-    - order them by regions, closer to further
-    - when a user finds a teacher, he can send a request to the teacher
-    - when the teachers login they can check an Activity where all the request are found
-    - the request will be on a separate table
-    - the Request Object will contain the following:
-        - student Id
-        - teacher Id
-        - timestamp
-        - status
-    - a request will an availability time period where the teacher can accept, probably about 30 days
-    - if the teacher doesn't answer within this time period then the request expire and is deleted from the database
-    - in the next login.
-    - needed functions
-        - find user by Id (DBHelper)
-        - find teacher by Id (DBHelper)
-        - list all teachers (DBHelper)
-	- list all requests (DBHelper)
-    - activities needed
-        - list teachers activity (ListView, teacherAdapter)
-        - Request list activity (ListView, requestAdapter)
-
-Added most of those things, one thing left, which is the timestamp and the logic behind it.
-One way is to use the Timestamp class, which uses the amount of milliseconds from 1970.
-Then, when a user creates a request, the timestamp in the db will contain the amount of milliseconds from 1970.
-and every time a user signs in, there is a system that will check the requests, and if a request is outdated, the function removes it.(This is necessary because the application is local and not online).
+ - after considiration, the best way to approach the teacher activity is with fragments, which will contain the logic for the app
+	- Lesson fragment: where the teacher can satrt and end a lesson on the app, while the lesson is active the gps will track the teachers phone and route.
+	- Requests fragment: a fragment, where the teacher can view all the requests from pupils, accept, reject and call students.
+	- Pupils fragment: will contain all the teachers pupils, and make it possible to schedual new lessons, by transfering the teacher to another activity.
+- Lesson fragment:
+	- start button (calls function in mydb that changes the lesson status on the db to ongoing, activates the gps on the teacher's phone), another press on the button will end the lesson and upload all the information to 	the db.
+	- on the bottom, an information center, including the time, and gps location at the moment.
+- Request fragment:
+	- pretty much the code from tyhe request activity to a fragment form factor
+- Pupils fragment:
+	- list view with all the teacher pupils (function in DBHelper), on each pupil, a button to schedual a lesson, using the time picker (another activity).
