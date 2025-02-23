@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.IDN;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -627,5 +628,22 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         sqdb.close();
         return current_teacher_id_final == 0;
+    }
+
+    public User getUserTeacher(int userId){
+        Cursor c;
+        int teacherId = 0;
+        User teacher = null;
+        sqdb = getWritableDatabase();
+        c = sqdb.query(TABLE_NAME, null, KEY_ID+"=?", new String[]{String.valueOf(userId)}, null, null, null);
+        int teacher_id_col = c.getColumnIndex(CURRENTTEACHERID);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            teacherId = c.getInt(teacher_id_col);
+            c.moveToNext();
+        }
+        teacher = getUserById(teacherId);
+        sqdb.close();
+        return teacher;
     }
 }

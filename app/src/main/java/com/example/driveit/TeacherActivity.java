@@ -24,7 +24,6 @@ import java.util.Calendar;
  * class that holds the code for the ctivity
  */
 public class TeacherActivity extends AppCompatActivity {
-    Button teacherSignOutBtn, requestViewBtn;
     SharedPreferences sp;
     SharedPreferences.Editor editor;
     DBHelper mydb;
@@ -63,25 +62,6 @@ public class TeacherActivity extends AppCompatActivity {
         }else{
             greetingTvTeacher.setText("Good Night,");
         }
-        teacherSignOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editor.putString("email", "");
-                editor.putString("password", "");
-                editor.putBoolean("isConnected", false);
-                editor.putBoolean("isTeacher", false);
-                editor.putInt("userId", 0);
-                editor.commit();
-                finish();
-            }
-        });
-        requestViewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TeacherActivity.this, RequestActivity.class);
-                startActivity(intent);
-            }
-        });
         mydb.validateRequests(sp.getInt("userId", 0), this);
     }
 
@@ -89,8 +69,6 @@ public class TeacherActivity extends AppCompatActivity {
      * function that initializes the elements in the activity
      */
     public void init(){
-        teacherSignOutBtn = findViewById(R.id.teacherSignOutBtn);
-        requestViewBtn = findViewById(R.id.requestViewBtn);
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
         editor = sp.edit();
         mydb = new DBHelper(this);
