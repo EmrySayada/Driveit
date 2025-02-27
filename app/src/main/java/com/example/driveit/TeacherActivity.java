@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.Calendar;
 
@@ -32,6 +33,8 @@ public class TeacherActivity extends AppCompatActivity {
     ImageView teacherPic;
     User user;
     Calendar cld;
+    ViewPagerAdapterTeacher pagerAdapter;
+    ViewPager2 vp2Pupil;
 
     /**
      * function that creates the activity
@@ -78,5 +81,8 @@ public class TeacherActivity extends AppCompatActivity {
         teacherNameTv = findViewById(R.id.teacherNameTv);
         teacherPic = findViewById(R.id.teacherPic);
         cld = Calendar.getInstance();
+        vp2Pupil = findViewById(R.id.vp2Pupil);
+        pagerAdapter = new ViewPagerAdapterTeacher(this);
+        vp2Pupil.setAdapter(pagerAdapter);
     }
 }

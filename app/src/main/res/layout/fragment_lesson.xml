@@ -5,15 +5,22 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LessonFragment">
+    android:background="@color/white"
+    tools:context=".LessonFragment" >
 
-    <TextView
-        android:id="@+id/textView9"
+    <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lesson frag"
+        android:background="@drawable/lessonstartbutton"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Start"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.197" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

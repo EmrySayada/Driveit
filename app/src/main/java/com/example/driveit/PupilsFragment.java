@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
 public class PupilsFragment extends Fragment {
+    ListView pupilsLessonLv;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -16,5 +19,7 @@ public class PupilsFragment extends Fragment {
         init(view);
         return view;
     }
-    public void init(View view){}
+    public void init(View view){
+        pupilsLessonLv = view.findViewById(R.id.pupilsLessonLv);
+    }
 }
