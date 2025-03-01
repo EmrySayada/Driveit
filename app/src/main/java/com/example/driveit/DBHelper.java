@@ -133,7 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Lesson_Create += LESSON_TYPE + " TEXT, ";
         SQL_Lesson_Create += LESSON_DATE + " TEXT, ";
         SQL_Lesson_Create += LESSON_GPS + " TEXT, ";
-        SQL_Lesson_Create += LESSON_FEEDBACK + "TEXT);";
+        SQL_Lesson_Create += LESSON_FEEDBACK + " TEXT);";
         db.execSQL(SQL_Lesson_Create);
     }
 
@@ -645,5 +645,35 @@ public class DBHelper extends SQLiteOpenHelper {
         teacher = getUserById(teacherId);
         sqdb.close();
         return teacher;
+    }
+
+    public ArrayList<User> getTeacherPupils(int teacherId){
+        Cursor c;
+        User pupil = null;
+        ArrayList<User> pupils = new ArrayList<>();
+        sqdb = getWritableDatabase();
+        c = sqdb.query(TABLE_NAME, null, CURRENTTEACHERID+"=?", new String[]{String.valueOf(teacherId)}, null,null,null);
+        int col_id = c.getColumnIndex(KEY_ID);
+        int col1=c.getColumnIndex(USERNAME);
+        int col2=c.getColumnIndex(PASSWORD);
+        int col3=c.getColumnIndex(EMAIL);
+        int col4=c.getColumnIndex(PHONE);
+        int col5=c.getColumnIndex(PICTURE);
+        int col6=c.getColumnIndex(ISTEACHER);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            int s_id = c.getInt(col_id);
+            String s1 = c.getString(col1);
+            String s2 = c.getString(col2);
+            String s3 = c.getString(col3);
+            String s4 = c.getString(col4);
+            Bitmap image = getPicture(c.getBlob(col5));
+            int s6 = c.getInt(col6);
+            pupil = new User(s1, s2, s3, s4, image, s6);
+            pupils.add(pupil);
+            c.moveToNext();
+        }
+        sqdb.close();
+        return pupils;
     }
 }

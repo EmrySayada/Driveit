@@ -1,6 +1,7 @@
 package com.example.driveit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ public class PupilAdapter extends ArrayAdapter<User> {
 
     public PupilAdapter(@NonNull Context context, int resource, @NonNull ArrayList<User> objects) {
         super(context, resource, objects);
+        this.context = context;
+        this.resource = resource;
     }
 
     public static class ViewHolder{
@@ -52,9 +55,12 @@ public class PupilAdapter extends ArrayAdapter<User> {
         holder.appointLessonBtnAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // move the teacher to another page where he canappoint a lesson to a student
-                // using putExtra, we give the activity, the user id, teacher id
-
+                // move the teacher to another page where he can appoint a lesson to a student
+                // using putExtra, we give the activity, the user id, teacher id.
+                Intent intent = new Intent(getContext(), AppointLesson.class);
+                intent.putExtra("teacherId", getItem(position).getCurrentTeacherId());
+                intent.putExtra("userId", getItem(position).getId());
+                context.startActivity(intent);
             }
         });
         return convertView;

@@ -65,11 +65,11 @@ public class Lesson {
      * @param teacherId
      * @param type
      */
-    public Lesson(int studentId, int teacherId, String type){
+    public Lesson(int studentId, int teacherId, String type, String timestamp){
         this.studentId = studentId;
         this.teacherId = teacherId;
         this.type = type;
-        this.timestamp = getDate();
+        this.timestamp = timestamp;
         this.feedback = "No feedback yet!";
     }
 
