@@ -23,6 +23,7 @@ public class RequestFragment extends Fragment {
     DBHelper mydb;
     SQLiteDatabase sqdb;
     SharedPreferences sp;
+    boolean noRequestsFlag = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +47,10 @@ public class RequestFragment extends Fragment {
         arrRequest.clear();
         arrRequest=mydb.getAllTeacherRequests(id, getActivity());
         adapter = new RequestAdapter(getActivity(), R.layout.list_requests, arrRequest);
+        adapter.setActivity(getActivity());
+        if(arrRequest.isEmpty()){
+            noRequestsFlag = true;
+        }
         requestLv.setAdapter(adapter);
     }
 }

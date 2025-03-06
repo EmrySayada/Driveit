@@ -17,6 +17,8 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
     String type;
     public LessonAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Lesson> objects) {
         super(context, resource, objects);
+        this.context = context;
+        this.resource = resource;
     }
     protected String[] formatDate(String date){
         String[] res= date.split(" ");

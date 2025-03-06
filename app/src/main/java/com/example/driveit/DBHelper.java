@@ -313,6 +313,34 @@ public class DBHelper extends SQLiteOpenHelper {
         return lessonArr;
     }
 
+    public ArrayList<Lesson> getAllTeacherLessons(int id){
+        Cursor c;
+        ArrayList<Lesson> lessonArr = new ArrayList<>();
+        sqdb = getWritableDatabase();
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_TEACHER_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+        int lesson_id_col = c.getColumnIndex(LESSON_KEY_ID);
+        int student_id_col = c.getColumnIndex(LESSON_STUDENT_ID);
+        int teacher_id_col = c.getColumnIndex(LESSON_TEACHER_ID);
+        int type_col = c.getColumnIndex(LESSON_TYPE);
+        int date_col = c.getColumnIndex(LESSON_DATE);
+        int gps_col = c.getColumnIndex(LESSON_GPS);
+        int feedback_col = c.getColumnIndex(LESSON_FEEDBACK);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            int lesson_id = c.getInt(lesson_id_col);
+            int student_id = c.getInt(student_id_col);
+            int teacher_id= c.getInt(teacher_id_col);
+            String type = c.getString(type_col);
+            String date = c.getString(date_col);
+            String gps = c.getString(gps_col);
+            String feedback = c.getString(feedback_col);
+            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, type ,date, gps, feedback);
+            lessonArr.add(lesson);
+            c.moveToNext();
+        }
+        return lessonArr;
+    }
+
     /**
      * function that gets all the teacher requests
      * @param id
@@ -670,6 +698,8 @@ public class DBHelper extends SQLiteOpenHelper {
             Bitmap image = getPicture(c.getBlob(col5));
             int s6 = c.getInt(col6);
             pupil = new User(s1, s2, s3, s4, image, s6);
+            pupil.setId(s_id);
+            pupil.setCurrentTeacherId(teacherId);
             pupils.add(pupil);
             c.moveToNext();
         }

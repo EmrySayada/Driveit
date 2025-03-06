@@ -26,6 +26,17 @@ public class Lesson {
         return timestamp;
     }
 
+    public String[] timestampToArray(){
+        // date comes in as DD/MM/YYYY HH:mm
+        String[] dateAndTime = this.timestamp.split(" ");
+        String[] date = dateAndTime[0].split("/");
+        String[] time = dateAndTime[1].split(":");
+        String[] res = new String[date.length + time.length];
+        System.arraycopy(date, 0, res, 0, date.length);
+        System.arraycopy(time, 0, res, date.length, time.length);
+        return res;
+    }
+
     /**
      * constructor for the lesson object
      * @param lessonId

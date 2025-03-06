@@ -1,10 +1,15 @@
 package com.example.driveit;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -38,6 +43,12 @@ public class PupilActivity extends AppCompatActivity {
     User user;
     Calendar cld;
     Window window;
+    ArrayList<Lesson> arrLesson;
+    LessonAdapter adapter;
+    ListView lessonsLv;
+    String stWhere="", channelID="", channelName="";
+    NotificationChannel channel;
+    NotificationManager manager;
 
     /**
      * function that create the activity
@@ -57,6 +68,7 @@ public class PupilActivity extends AppCompatActivity {
             return insets;
         });
         init();
+        createListOfLessons();
         if(mydb.isWithoutTeacher(sp.getString("email", ""))){
             Intent intent = new Intent(PupilActivity.this, ChooseTeacher.class);
             startActivity(intent);
@@ -72,9 +84,6 @@ public class PupilActivity extends AppCompatActivity {
         }
         pupilNameTv.setText(user.getUsername());
         pupilPic.setImageBitmap(user.getImage());
-
-
-
         pupilSignOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +112,41 @@ public class PupilActivity extends AppCompatActivity {
         cld = Calendar.getInstance();
         window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.mainColor));
+        lessonsLv = findViewById(R.id.lessonsLv);
+        arrLesson = new ArrayList<>();
+        channelID="channel_id";
+        channelName="Alert_channel";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channel=new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        }
+        manager=getSystemService(NotificationManager.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(channel);
+        }
+    }
+
+    public void createListOfLessons(){
+        int id = sp.getInt("userId", 0);
+        arrLesson.clear();
+        arrLesson = mydb.getAllUserLessons(id);
+        adapter = new LessonAdapter(this, R.layout.list_lessons, arrLesson);
+        lessonsLv.setAdapter(adapter);
+    }
+    public void setNotificationsForLessons(int userId){
+        // DD/MM/yyyy HH:mm
+        ArrayList<Lesson> lessons = mydb.getAllUserLessons(userId);
+        for(int i = 0; i<lessons.size(); i++){
+            Lesson l = lessons.get(i);
+            String[] date = l.timestampToArray();
+            cld = Calendar.getInstance();
+            cld.setTimeInMillis(System.currentTimeMillis());
+            cld.set(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2]),Integer.parseInt(date[3]),Integer.parseInt(date[4]),0);
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = this.getSystemService(AlarmManager.class);
+            long alarmTime = cld.getTimeInMillis();
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+        }
     }
 
 }

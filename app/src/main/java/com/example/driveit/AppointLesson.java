@@ -43,6 +43,8 @@ public class AppointLesson extends AppCompatActivity {
             return insets;
         });
         init();
+        Toast.makeText(this, userId + "" + teacherId, Toast.LENGTH_SHORT).show();
+        appointLessonHeaderTv.setText("Appoint Lesson");
         appointLessonCV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -50,6 +52,7 @@ public class AppointLesson extends AppCompatActivity {
                 int mMonth = month;
                 int mDay = dayOfMonth;
                 date += mDay + "/" + (mMonth + 1) + "/" + mYear;
+                appointLessonTimePickerBtn.setEnabled(true);
             }
         });
         appointLessonCV.setMinDate(c.getTimeInMillis());
@@ -88,12 +91,12 @@ public class AppointLesson extends AppCompatActivity {
         approveDetailsBtn = findViewById(R.id.approveDetailsBtn);
         mydb = new DBHelper(this);
         Intent intent = getIntent();
-        userId = intent.getIntExtra("userId", 0);
+        userId = intent.getIntExtra("userId", 1);
         teacherId = intent.getIntExtra("teacherId", 0);
         date = "";
         c = Calendar.getInstance();
         currentHour = c.get(Calendar.HOUR_OF_DAY);
         currentMinute = c.get(Calendar.MINUTE);
-
+        appointLessonTimePickerBtn.setEnabled(false);
     }
 }

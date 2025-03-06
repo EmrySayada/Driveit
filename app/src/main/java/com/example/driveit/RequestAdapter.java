@@ -1,5 +1,6 @@
 package com.example.driveit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,6 +27,7 @@ public class RequestAdapter extends ArrayAdapter<Request> {
     private int resource;
     String student_name, phone_number;
     Bitmap image;
+    Activity currentActivity;
 
     /**
      * constructor for the adapter
@@ -37,6 +39,10 @@ public class RequestAdapter extends ArrayAdapter<Request> {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
+    }
+
+    public void setActivity(Activity act){
+        this.currentActivity = act;
     }
 
     /**
@@ -95,13 +101,16 @@ public class RequestAdapter extends ArrayAdapter<Request> {
             @Override
             public void onClick(View v) {
                 getItem(position).acceptRequest();
+                currentActivity.finish();
+                context.startActivity(currentActivity.getIntent());
             }
         });
         holder.rejectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getItem(position).rejectRequest();
-
+                currentActivity.finish();
+                context.startActivity(currentActivity.getIntent());
             }
         });
         return convertView;
