@@ -48,6 +48,7 @@ public class AppointLesson extends AppCompatActivity {
         appointLessonCV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                date = "";
                 int mYear = year;
                 int mMonth = month;
                 int mDay = dayOfMonth;
@@ -62,10 +63,12 @@ public class AppointLesson extends AppCompatActivity {
                 TimePickerDialog tpd = new TimePickerDialog(AppointLesson.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String time = "";
                         int mhour = hourOfDay;
                         int mminute = minute;
                         int msecond=0;
-                        date += " " + mhour + ":" + mminute;
+                        time = " " + mhour + ":" + mminute;
+                        date += time;
                         appointLessonTimeTv.setText(date);
                     }
                 }, currentHour, currentMinute, true);

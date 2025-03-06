@@ -111,18 +111,17 @@ public class TeacherActivity extends AppCompatActivity {
 
     public void setNotificationsForLessons(int userId){
         // DD/MM/yyyy HH:mm
-        ArrayList<Lesson> lessons = mydb.getAllTeacherLessons(userId);
-        for(int i = 0; i<lessons.size(); i++){
-            Lesson l = lessons.get(i);
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        lessons = mydb.getAllTeacherLessons(userId);
+            Lesson l = lessons.get(0);
             String[] date = l.timestampToArray();
             cld = Calendar.getInstance();
             cld.setTimeInMillis(System.currentTimeMillis());
             cld.set(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2]),Integer.parseInt(date[3]),Integer.parseInt(date[4]),0);
             Intent intent = new Intent(context, AlarmReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = context.getSystemService(AlarmManager.class);
+            AlarmManager alarmManager = getSystemService(AlarmManager.class);
             long alarmTime = cld.getTimeInMillis();
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
-        }
     }
 }

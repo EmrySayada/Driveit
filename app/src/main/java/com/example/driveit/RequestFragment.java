@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ public class RequestFragment extends Fragment {
     DBHelper mydb;
     SQLiteDatabase sqdb;
     SharedPreferences sp;
+    TextView noRequestsTv;
     boolean noRequestsFlag = false;
 
     @Override
@@ -32,6 +34,11 @@ public class RequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         init(view);
         createListOfRequests();
+        if(noRequestsFlag){
+            noRequestsTv.setVisibility(View.VISIBLE);
+        }else{
+            noRequestsTv.setVisibility(View.INVISIBLE);
+        }
         return view;
     }
     public void init(View view){
@@ -39,6 +46,7 @@ public class RequestFragment extends Fragment {
         sp = getActivity().getSharedPreferences("PREFS_FILE", MODE_PRIVATE);
         mydb = new DBHelper(getActivity());
         arrRequest = new ArrayList<>();
+        noRequestsTv = view.findViewById(R.id.noRequestsTv);
     }
 
     public void createListOfRequests(){

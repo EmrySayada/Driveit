@@ -69,6 +69,7 @@ public class PupilActivity extends AppCompatActivity {
         });
         init();
         createListOfLessons();
+        setNotificationsForLessons(sp.getInt("userId", 0));
         if(mydb.isWithoutTeacher(sp.getString("email", ""))){
             Intent intent = new Intent(PupilActivity.this, ChooseTeacher.class);
             startActivity(intent);
@@ -134,7 +135,8 @@ public class PupilActivity extends AppCompatActivity {
     }
     public void setNotificationsForLessons(int userId){
         // DD/MM/yyyy HH:mm
-        ArrayList<Lesson> lessons = mydb.getAllUserLessons(userId);
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        lessons = mydb.getAllUserLessons(userId);
         for(int i = 0; i<lessons.size(); i++){
             Lesson l = lessons.get(i);
             String[] date = l.timestampToArray();
