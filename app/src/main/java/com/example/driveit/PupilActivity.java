@@ -46,6 +46,7 @@ public class PupilActivity extends AppCompatActivity {
     ArrayList<Lesson> arrLesson;
     LessonAdapter adapter;
     ListView lessonsLv;
+    Context context;
     String stWhere="", channelID="", channelName="";
     NotificationChannel channel;
     NotificationManager manager;
@@ -124,6 +125,7 @@ public class PupilActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             manager.createNotificationChannel(channel);
         }
+        context = PupilActivity.this;
     }
 
     public void createListOfLessons(){

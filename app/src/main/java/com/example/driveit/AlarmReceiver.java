@@ -15,6 +15,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context, "Alarm is on!", Toast.LENGTH_SHORT).show();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         String channelId = "channel_id";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)

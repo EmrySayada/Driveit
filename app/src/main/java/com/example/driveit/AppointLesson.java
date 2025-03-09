@@ -54,6 +54,7 @@ public class AppointLesson extends AppCompatActivity {
                 int mDay = dayOfMonth;
                 date += mDay + "/" + (mMonth + 1) + "/" + mYear;
                 appointLessonTimePickerBtn.setEnabled(true);
+                Toast.makeText(AppointLesson.this, ""+mDay, Toast.LENGTH_SHORT).show();
             }
         });
         appointLessonCV.setMinDate(c.getTimeInMillis());
