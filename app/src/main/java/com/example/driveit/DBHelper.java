@@ -706,4 +706,23 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
         return pupils;
     }
+
+    public Lesson findClosestLesson(int teacherId){
+        ArrayList<Lesson> lessons = getAllTeacherLessons(teacherId);
+        long current = Calendar.getInstance().getTimeInMillis();
+        long minDiff = Long.MAX_VALUE;
+        Lesson lessonMin = null;
+        for(int i = 0; i<lessons.size(); i++){
+            Lesson l = lessons.get(i);
+            Calendar cld = Calendar.getInstance();
+            String[] timeArray = l.timestampToArray();
+            cld.set(Integer.parseInt(timeArray[2]),Integer.parseInt(timeArray[1]),Integer.parseInt(timeArray[0]),Integer.parseInt(timeArray[3]),Integer.parseInt(timeArray[4]), 0);
+            long diff = cld.getTimeInMillis() - current;
+            if (minDiff > diff){
+                minDiff = diff;
+                lessonMin = l;
+            }
+        }
+        return lessonMin;
+    }
 }
