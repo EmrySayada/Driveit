@@ -73,7 +73,6 @@ public class PupilActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
         init();
         createListOfLessons();
-        setNotificationsForLessons(sp.getInt("userId", 0));
         if(mydb.isWithoutTeacher(sp.getString("email", ""))){
             Intent intent = new Intent(PupilActivity.this, ChooseTeacher.class);
             startActivity(intent);
@@ -101,6 +100,7 @@ public class PupilActivity extends AppCompatActivity {
                 finish();
             }
         });
+        setNotificationsForLessons(sp.getInt("userId", 0));
     }
 
     /**

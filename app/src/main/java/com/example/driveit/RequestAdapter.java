@@ -94,7 +94,7 @@ public class RequestAdapter extends ArrayAdapter<Request> {
             public void onClick(View v) {
                 String tel = "tel:" + phone_number;
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
-                context.startActivity(intent);
+                currentActivity.startActivity(intent);
             }
         });
         holder.approveBtn.setOnClickListener(new View.OnClickListener() {
