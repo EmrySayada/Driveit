@@ -110,6 +110,10 @@ public class TeacherActivity extends AppCompatActivity {
         context = TeacherActivity.this;
     }
 
+    /**
+     * function that sets the notifications for the lessons.
+     * @param userId
+     */
     public void setNotificationsForLessons(int userId){
         // DD/MM/yyyy HH:mm
         ArrayList<Lesson> lessons = new ArrayList<>();

@@ -20,6 +20,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Calendar;
 
+/**
+ * @author Emry Sayada
+ * activity that houses the lesson appointment logic
+ */
 public class AppointLesson extends AppCompatActivity {
     TextView appointLessonHeaderTv, appointLessonTimeTv;
     CalendarView appointLessonCV;
@@ -32,6 +36,13 @@ public class AppointLesson extends AppCompatActivity {
     int teacherId;
     int currentHour, currentMinute;
 
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +98,9 @@ public class AppointLesson extends AppCompatActivity {
         });
     }
 
+    /**
+     * function that initializes all the UI elements
+     */
     public void init(){
         appointLessonCV = findViewById(R.id.appointLessonCV);
         appointLessonHeaderTv = findViewById(R.id.appointLessonHeaderTv);

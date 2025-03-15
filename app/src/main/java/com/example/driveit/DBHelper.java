@@ -63,6 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LESSON_DATE = "date";
     public static final String LESSON_GPS = "gps";
     public static final String LESSON_FEEDBACK = "feedback";
+    public static final String LESSON_STATUS = "status";
 
 
     //TODO add variables to another sql table
@@ -133,7 +134,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQL_Lesson_Create += LESSON_TYPE + " TEXT, ";
         SQL_Lesson_Create += LESSON_DATE + " TEXT, ";
         SQL_Lesson_Create += LESSON_GPS + " TEXT, ";
-        SQL_Lesson_Create += LESSON_FEEDBACK + " TEXT);";
+        SQL_Lesson_Create += LESSON_FEEDBACK + " TEXT, ";
+        SQL_Lesson_Create += LESSON_STATUS + " TEXT);";
         db.execSQL(SQL_Lesson_Create);
     }
 
@@ -276,6 +278,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(LESSON_DATE, l.getTimestamp());
         cv.put(LESSON_GPS, l.getGps());
         cv.put(LESSON_FEEDBACK, l.getFeedback());
+        cv.put(LESSON_STATUS, l.getStatus());
         sqdb.insert(LESSON_TABLE_NAME, null, cv);
         sqdb.close();
     }
@@ -297,6 +300,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int date_col = c.getColumnIndex(LESSON_DATE);
         int gps_col = c.getColumnIndex(LESSON_GPS);
         int feedback_col = c.getColumnIndex(LESSON_FEEDBACK);
+        int status_col = c.getColumnIndex(LESSON_STATUS);
         c.moveToFirst();
         while(!c.isAfterLast()){
             int lesson_id = c.getInt(lesson_id_col);
@@ -306,13 +310,19 @@ public class DBHelper extends SQLiteOpenHelper {
             String date = c.getString(date_col);
             String gps = c.getString(gps_col);
             String feedback = c.getString(feedback_col);
-            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, type ,date, gps, feedback);
+            String status = c.getString(status_col);
+            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, type ,date, gps, feedback, status);
             lessonArr.add(lesson);
             c.moveToNext();
         }
         return lessonArr;
     }
 
+    /**
+     * function that fetches all the teacher's lesson
+     * @param id
+     * @return ArrayList<Lesson> teacher's lessons
+     */
     public ArrayList<Lesson> getAllTeacherLessons(int id){
         Cursor c;
         ArrayList<Lesson> lessonArr = new ArrayList<>();
@@ -325,6 +335,7 @@ public class DBHelper extends SQLiteOpenHelper {
         int date_col = c.getColumnIndex(LESSON_DATE);
         int gps_col = c.getColumnIndex(LESSON_GPS);
         int feedback_col = c.getColumnIndex(LESSON_FEEDBACK);
+        int status_col = c.getColumnIndex(LESSON_STATUS);
         c.moveToFirst();
         while(!c.isAfterLast()){
             int lesson_id = c.getInt(lesson_id_col);
@@ -334,7 +345,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String date = c.getString(date_col);
             String gps = c.getString(gps_col);
             String feedback = c.getString(feedback_col);
-            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, type ,date, gps, feedback);
+            String status = c.getString(status_col);
+            Lesson lesson = new Lesson(lesson_id, student_id, teacher_id, type ,date, gps, feedback, status);
             lessonArr.add(lesson);
             c.moveToNext();
         }
@@ -658,6 +670,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return current_teacher_id_final == 0;
     }
 
+    /**
+     * get the pupil's teacher object
+     * @param userId
+     * @return teacher
+     */
     public User getUserTeacher(int userId){
         Cursor c;
         int teacherId = 0;
@@ -675,6 +692,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return teacher;
     }
 
+    /**
+     * function that gets all the pupils of a teacher
+     * @param teacherId
+     * @return arrayList<User> contains all the teacher's pupils
+     */
     public ArrayList<User> getTeacherPupils(int teacherId){
         Cursor c;
         User pupil = null;
@@ -707,6 +729,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return pupils;
     }
 
+    /**
+     * function that gets the closest lesson to the current time
+     * @param teacherId
+     * @return
+     */
     public Lesson findClosestLesson(int teacherId){
         ArrayList<Lesson> lessons = getAllTeacherLessons(teacherId);
         long current = Calendar.getInstance().getTimeInMillis();
@@ -724,5 +751,21 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
         return lessonMin;
+    }
+
+    /**
+     * starting the lesson in the database (start to get gps location, and change the status on the db)
+     * @param lessonId
+     */
+    public void startLesson(int lessonId){
+        //TODO: find how to get the user gps location, and add it to the database. (find out how to do it in as few calls to the database as possible)
+    }
+
+    /**
+     * ending the lesson in the database (changing the lesson status)
+     * @param lessonId
+     */
+    public void endLesson(int lessonId){
+
     }
 }

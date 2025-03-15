@@ -15,6 +15,10 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+/**
+ * @author Emry Sayada
+ * class that houses the logic for the pupil's fragment
+ */
 public class PupilsFragment extends Fragment {
     ListView pupilsLessonLv;
     ArrayList<User> pupils;
@@ -22,6 +26,19 @@ public class PupilsFragment extends Fragment {
     DBHelper mydb;
     SQLiteDatabase sqdb;
     SharedPreferences sp;
+
+    /**
+     * function that creates the UI
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,6 +48,11 @@ public class PupilsFragment extends Fragment {
         createListOfPupils();
         return view;
     }
+
+    /**
+     * function that initializes all the elements
+     * @param view
+     */
     public void init(View view){
         pupilsLessonLv = view.findViewById(R.id.pupilsLessonLv);
         mydb = new DBHelper(getActivity());
@@ -38,6 +60,9 @@ public class PupilsFragment extends Fragment {
         sp = getActivity().getSharedPreferences("PREFS_FILE", MODE_PRIVATE);
     }
 
+    /**
+     * function that creates the list of pupils
+     */
     public void createListOfPupils(){
         int id = sp.getInt("userId", 0);
         pupils.clear();

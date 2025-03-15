@@ -10,11 +10,19 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+/**
+ * @author Emry Sayada
+ * A broadcast receiver for notifications
+ */
 public class AlarmReceiver extends BroadcastReceiver {
-
+    /**
+     * constructor with the logic for the notifications
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Alarm is on!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "Alarm is on!", Toast.LENGTH_SHORT).show();
         Intent go = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, go, PendingIntent.FLAG_IMMUTABLE);

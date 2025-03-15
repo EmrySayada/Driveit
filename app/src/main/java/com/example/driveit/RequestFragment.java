@@ -16,7 +16,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+/**
+ * @author Emry Sayada
+ * class that houses the logic for the request fragment in the Teacher Activity
+ */
 public class RequestFragment extends Fragment {
     ListView requestLv;
     ArrayList<Request> arrRequest;
@@ -27,6 +30,18 @@ public class RequestFragment extends Fragment {
     TextView noRequestsTv;
     boolean noRequestsFlag = false;
 
+    /**
+     * function that creates the fragment
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,6 +56,11 @@ public class RequestFragment extends Fragment {
         }
         return view;
     }
+
+    /**
+     * function that initializes all the elements
+     * @param view
+     */
     public void init(View view){
         requestLv = view.findViewById(R.id.requestLv);
         sp = getActivity().getSharedPreferences("PREFS_FILE", MODE_PRIVATE);
@@ -49,6 +69,9 @@ public class RequestFragment extends Fragment {
         noRequestsTv = view.findViewById(R.id.noRequestsTv);
     }
 
+    /**
+     * function that creates the list of the request
+     */
     public void createListOfRequests(){
         String email = sp.getString("email", "");
         int id = mydb.searchUserIdByEmail(email);

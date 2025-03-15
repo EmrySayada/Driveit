@@ -14,7 +14,12 @@ public class Lesson {
     private String timestamp;
     private String gps;
     private String feedback;
+    private String status;
 
+    /**
+     * function that gets the current date
+     * @return timestamp (current time and date)
+     */
     public String getDate(){
         timestamp="";
         Calendar cld = Calendar.getInstance();
@@ -26,6 +31,10 @@ public class Lesson {
         return timestamp;
     }
 
+    /**
+     * function that convert the timestamp to an array by the format DD/MM/YYYY HH:mm
+     * @return date array
+     */
     public String[] timestampToArray(){
         // date comes in as DD/MM/YYYY HH:mm
         String[] dateAndTime = this.timestamp.split(" ");
@@ -46,8 +55,9 @@ public class Lesson {
      * @param gps
      * @param feedback
      * @param type
+     * @param status
      */
-    public Lesson(int lessonId, int studentId, int teacherId, String type,String timestamp, String gps, String feedback){
+    public Lesson(int lessonId, int studentId, int teacherId, String type,String timestamp, String gps, String feedback, String status){
         this.lessonId = lessonId;
         this.studentId = studentId;
         this.teacherId = teacherId;
@@ -55,6 +65,7 @@ public class Lesson {
         this.timestamp = timestamp;
         this.gps = gps;
         this.feedback = feedback;
+        this.status = status;
     }
 
     /**
@@ -68,6 +79,7 @@ public class Lesson {
         this.timestamp = other.timestamp;
         this.gps = other.gps;
         this.feedback = other.feedback;
+        this.status = other.status;
     }
 
     /**
@@ -82,6 +94,7 @@ public class Lesson {
         this.type = type;
         this.timestamp = timestamp;
         this.feedback = "No feedback yet!";
+        this.status = "Pending";
     }
 
     /**
@@ -197,6 +210,18 @@ public class Lesson {
     }
 
     /**
+     * getter for status
+     * @return status
+     */
+    public String getStatus(){return status;}
+
+    /**
+     * setter for status
+     * @param status
+     */
+    public void setStatus(String status) {this.status = status;}
+
+    /**
      * serializing the object to string
      * @return object overview
      */
@@ -207,6 +232,7 @@ public class Lesson {
                 "\nteacherId: "+this.teacherId+
                 "\ndate: "+this.timestamp+
                 "\ngps: "+this.gps+
-                "\nfeedback: "+this.feedback;
+                "\nfeedback: "+this.feedback+
+                "\nstatus: "+this.status;
     }
 }

@@ -131,6 +131,9 @@ public class PupilActivity extends AppCompatActivity {
         context = PupilActivity.this;
     }
 
+    /**
+     * function that creates the UI list of the lessons
+     */
     public void createListOfLessons(){
         int id = sp.getInt("userId", 0);
         arrLesson.clear();
@@ -138,6 +141,11 @@ public class PupilActivity extends AppCompatActivity {
         adapter = new LessonAdapter(this, R.layout.list_lessons, arrLesson);
         lessonsLv.setAdapter(adapter);
     }
+
+    /**
+     * function that creates the notifications for all the lessons
+     * @param userId
+     */
     public void setNotificationsForLessons(int userId){
         // DD/MM/yyyy HH:mm
         ArrayList<Lesson> lessons = new ArrayList<>();
