@@ -732,7 +732,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * function that gets the closest lesson to the current time
      * @param teacherId
-     * @return
+     * @return lesson
      */
     public Lesson findClosestLesson(int teacherId){
         ArrayList<Lesson> lessons = getAllTeacherLessons(teacherId);

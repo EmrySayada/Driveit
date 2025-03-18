@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -21,8 +22,9 @@ import android.widget.TextView;
  */
 public class LessonFragment extends Fragment {
     Button startLessonBtn, callPupilBtn;
-    TextView lessontimeTv, pupilUsername;
+    TextView lessontimeTv, pupilUsername, noLessonTv;
     Lesson currentLesson;
+    ImageView pupilPic;
     DBHelper mydb;
     SQLiteDatabase sqdb;
     SharedPreferences sp;
@@ -45,8 +47,10 @@ public class LessonFragment extends Fragment {
         init(view);
         currentLesson = mydb.findClosestLesson(sp.getInt("userId", 0));
         if(currentLesson!=null){
+            noLessonTv.setVisibility(View.GONE);
             lessontimeTv.setText(currentLesson.getTimestamp());
             pupilUsername.setText(mydb.getUserById(currentLesson.getStudentId()).getUsername());
+            pupilPic.setImageBitmap(mydb.getUserById(currentLesson.getStudentId()).getImage());
             callPupilBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -55,6 +59,8 @@ public class LessonFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+        }else{
+            noLessonTv.setVisibility(View.VISIBLE);
         }
         return view;
     }
@@ -70,6 +76,7 @@ public class LessonFragment extends Fragment {
         callPupilBtn = view.findViewById(R.id.callPupilBtn);
         lessontimeTv = view.findViewById(R.id.lessontimeTv);
         pupilUsername = view.findViewById(R.id.pupilUsername);
-
+        pupilPic = view.findViewById(R.id.pupilPic);
+        noLessonTv = view.findViewById(R.id.noLessonTv);
     }
 }

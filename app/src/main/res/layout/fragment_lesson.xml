@@ -47,24 +47,36 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
+                android:layout_width="130dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="20dp"
                 android:layout_marginLeft="10dp"
-                android:layout_height="wrap_content">
+                android:layout_height="130dp">
 
                 <ImageView
                     android:id="@+id/pupilPic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     tools:src="@tools:sample/avatars" />
             </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/noLessonTv"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="#C7C7C7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="24dp"
+                android:visibility="gone"
+                android:text="No lesson!" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/pupilUsername"
@@ -79,7 +91,7 @@
                 <TextView
                     android:id="@+id/lessontimeTv"
                     android:textColor="@color/mainColor"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/poppins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
