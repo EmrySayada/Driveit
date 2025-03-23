@@ -1,12 +1,6 @@
 TODO:
- - after considiration, the best way to approach the teacher activity is with fragments, which will contain the logic for the app
-	- Lesson fragment: where the teacher can satrt and end a lesson on the app, while the lesson is active the gps will track the teachers phone and route.
-	- Requests fragment: a fragment, where the teacher can view all the requests from pupils, accept, reject and call students.
-	- Pupils fragment: will contain all the teachers pupils, and make it possible to schedual new lessons, by transfering the teacher to another activity.
-- Lesson fragment:
-	- start button (calls function in mydb that changes the lesson status on the db to ongoing, activates the gps on the teacher's phone), another press on the button will end the lesson and upload all the information to 	the db.
-	- on the bottom, an information center, including the time, and gps location at the moment.
-- Request fragment:
-	- pretty much the code from tyhe request activity to a fragment form factor
-- Pupils fragment:
-	- list view with all the teacher pupils (function in DBHelper), on each pupil, a button to schedual a lesson, using the time picker (another activity).
+  - create gps logic, one option, is to create an array list where each item will contain the lat log of the position.
+  - create a function that runs every couple second, that gets the current gps location.
+  - find out how to implement this logic using the service to get the option that it will continue to update the location even if the phone is off.
+  - add the start and end to a map view
+    - create api key

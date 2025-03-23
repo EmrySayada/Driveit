@@ -54,7 +54,6 @@ public class AppointLesson extends AppCompatActivity {
             return insets;
         });
         init();
-        Toast.makeText(this, userId + "" + teacherId, Toast.LENGTH_SHORT).show();
         appointLessonHeaderTv.setText("Appoint Lesson");
         appointLessonCV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -65,7 +64,6 @@ public class AppointLesson extends AppCompatActivity {
                 int mDay = dayOfMonth;
                 date += mDay + "/" + (mMonth + 1) + "/" + mYear;
                 appointLessonTimePickerBtn.setEnabled(true);
-                Toast.makeText(AppointLesson.this, ""+mDay, Toast.LENGTH_SHORT).show();
             }
         });
         appointLessonCV.setMinDate(c.getTimeInMillis());
