@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class LessonFragment extends Fragment {
     DBHelper mydb;
     SQLiteDatabase sqdb;
     SharedPreferences sp;
+    CardView pupilPicWrapper;
 
     /**
      * function that creates the fragment
@@ -60,7 +62,12 @@ public class LessonFragment extends Fragment {
                 }
             });
         }else{
+            lessontimeTv.setVisibility(View.GONE);
+            pupilPic.setVisibility(View.GONE);
+            pupilUsername.setVisibility(View.GONE);
+            callPupilBtn.setVisibility(View.GONE);
             noLessonTv.setVisibility(View.VISIBLE);
+            pupilPicWrapper.setVisibility(View.INVISIBLE);
         }
         return view;
     }
@@ -78,5 +85,6 @@ public class LessonFragment extends Fragment {
         pupilUsername = view.findViewById(R.id.pupilUsername);
         pupilPic = view.findViewById(R.id.pupilPic);
         noLessonTv = view.findViewById(R.id.noLessonTv);
+        pupilPicWrapper = view.findViewById(R.id.pupilPicWrapper);
     }
 }

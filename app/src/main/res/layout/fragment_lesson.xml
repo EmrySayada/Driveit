@@ -47,6 +47,7 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/pupilPicWrapper"
                 android:layout_width="130dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="10dp"

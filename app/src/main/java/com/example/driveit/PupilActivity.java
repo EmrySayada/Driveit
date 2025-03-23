@@ -70,7 +70,7 @@ public class PupilActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.CALL_PHONE}, 1);
         init();
         createListOfLessons();
         if(mydb.isWithoutTeacher(sp.getString("email", ""))){
