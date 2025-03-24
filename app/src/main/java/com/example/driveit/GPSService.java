@@ -20,6 +20,16 @@ public class GPSService extends Service implements LocationListener {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void onLocationChanged(@NonNull Location location) {
 
     }
