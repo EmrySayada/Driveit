@@ -765,7 +765,9 @@ public class DBHelper extends SQLiteOpenHelper {
      * ending the lesson in the database (changing the lesson status)
      * @param lessonId
      */
-    public void endLesson(int lessonId){
-
+    public void endLesson(int lessonId, ArrayList<ArrayList<Double>> locationArr){
+        sqdb = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+//        cv.put(LESSON_GPS, locationArr);
     }
 }
