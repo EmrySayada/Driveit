@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * @author Emry Sayada
@@ -76,6 +77,24 @@ public class LessonFragment extends Fragment {
             noLessonTv.setVisibility(View.VISIBLE);
             pupilPicWrapper.setVisibility(View.INVISIBLE);
         }
+        startLessonBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentStatus = mydb.getLessonStatus(currentLesson.getLessonId());
+                if(currentStatus.equals("pending")){
+                    mydb.startLesson(currentLesson.getLessonId());
+                    Intent go = new Intent(getContext(), GPSService.class);
+                    go.putExtra("lessonId", currentLesson.getLessonId());
+                    getContext().startService(go);
+                    Toast.makeText(getContext(), "Lesson Started!", Toast.LENGTH_SHORT).show();
+                }else if(currentStatus.equals("ongoing")){
+                    Intent endService = new Intent(getContext(), GPSService.class);
+                    getContext().stopService(endService);
+                    Toast.makeText(getContext(), "Lesson Ended!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
         return view;
     }
 

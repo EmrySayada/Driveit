@@ -2,19 +2,26 @@ package com.example.driveit;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 
 import androidx.annotation.Nullable;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.IDN;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * @author Emry Sayada
@@ -327,7 +334,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor c;
         ArrayList<Lesson> lessonArr = new ArrayList<>();
         sqdb = getWritableDatabase();
-        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_TEACHER_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_TEACHER_ID+"=? AND " + LESSON_STATUS+"=?", new String[]{String.valueOf(id), "pending"}, null, null, null);
         int lesson_id_col = c.getColumnIndex(LESSON_KEY_ID);
         int student_id_col = c.getColumnIndex(LESSON_STUDENT_ID);
         int teacher_id_col = c.getColumnIndex(LESSON_TEACHER_ID);
@@ -759,15 +766,47 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public void startLesson(int lessonId){
         //TODO: find how to get the user gps location, and add it to the database. (find out how to do it in as few calls to the database as possible)
-    }
-
-    /**
-     * ending the lesson in the database (changing the lesson status)
-     * @param lessonId
-     */
-    public void endLesson(int lessonId, ArrayList<ArrayList<Double>> locationArr){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
-//        cv.put(LESSON_GPS, locationArr);
+        cv.put(LESSON_STATUS, "ongoing");
+        sqdb.update(LESSON_TABLE_NAME, cv, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)});
+        sqdb.close();
+    }
+
+    public void insertRoute(int lessonId, ArrayList<Location> locationArray){
+        sqdb = getWritableDatabase();
+        JSONArray jsonArray = new JSONArray();
+        for(Location loc : locationArray){
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("lat", loc.getLatitude());
+                obj.put("lon", loc.getLongitude());
+                jsonArray.put(obj);
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        ContentValues cv = new ContentValues();
+        cv.put(LESSON_GPS, jsonArray.toString());
+        cv.put(LESSON_STATUS, "ended");
+        sqdb.update(LESSON_TABLE_NAME, cv, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)});
+        sqdb.close();
+    }
+
+    public String getLessonStatus(int lessonId){
+        Cursor c;
+        String status = "";
+        sqdb = getWritableDatabase();
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)}, null, null, null);
+        int col_id = c.getColumnIndex(LESSON_KEY_ID);
+        int status_col = c.getColumnIndex(LESSON_STATUS);
+        c.moveToFirst();
+        while(!c.isAfterLast()){
+            int l_id = c.getInt(col_id);
+            status = c.getString(status_col);
+            c.moveToNext();
+        }
+        sqdb.close();
+        return status;
     }
 }

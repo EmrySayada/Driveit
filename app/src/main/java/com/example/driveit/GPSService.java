@@ -12,12 +12,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
@@ -31,8 +33,10 @@ public class GPSService extends Service implements LocationListener {
     String provider;
     LocationManager locationManager;
     Location location;
-    ArrayList<ArrayList<Double>> locationArr;
+    ArrayList<Location> locationArr;
     ScheduledExecutorService scheduler;
+
+    private int lessonId;
     public GPSService() {
     }
 
@@ -42,8 +46,7 @@ public class GPSService extends Service implements LocationListener {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public ArrayList<Double> getCurrentLocation(){
-        ArrayList<Double> res = new ArrayList<>();
+    public Location getCurrentLocation(){
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(criteria, true);
@@ -55,32 +58,40 @@ public class GPSService extends Service implements LocationListener {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return new ArrayList<>();
+            return null;
         }
         locationManager.requestLocationUpdates(provider, 2000, 1, this);
         location = locationManager.getLastKnownLocation(provider);
-        if(location != null){
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-            res.add(lat);
-            res.add(lon);
+        if(location == null){
+            return null;
         }
-        return res;
+        return location;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        lessonId = intent.getIntExtra("lessonId", 0);
         locationArr = new ArrayList<>();
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> {
-            locationArr.add(getCurrentLocation());
-        }, 0, 5, TimeUnit.SECONDS);
-        return super.onStartCommand(intent, flags, startId);
+        scheduler.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                Location loc = getCurrentLocation();
+                locationArr.add(loc);
+                Log.e("location", "onStartCommand: " + loc);
+            }
+        }, 0, 3, TimeUnit.SECONDS);
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         mydb = new DBHelper(this);
+        Log.d("service", "onDestroy: service closed");
+        mydb.insertRoute(lessonId, locationArr);
+        if (scheduler != null){
+            scheduler.shutdown();
+        }
         super.onDestroy();
     }
 

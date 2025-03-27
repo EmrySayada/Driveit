@@ -94,7 +94,7 @@ public class Lesson {
         this.type = type;
         this.timestamp = timestamp;
         this.feedback = "No feedback yet!";
-        this.status = "Pending";
+        this.status = "pending";
     }
 
     /**
