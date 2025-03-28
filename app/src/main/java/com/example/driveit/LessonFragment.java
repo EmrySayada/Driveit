@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationListener;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -85,11 +86,11 @@ public class LessonFragment extends Fragment {
                     mydb.startLesson(currentLesson.getLessonId());
                     Intent go = new Intent(getContext(), GPSService.class);
                     go.putExtra("lessonId", currentLesson.getLessonId());
-                    getContext().startService(go);
+                    getActivity().startService(go);
                     Toast.makeText(getContext(), "Lesson Started!", Toast.LENGTH_SHORT).show();
                 }else if(currentStatus.equals("ongoing")){
                     Intent endService = new Intent(getContext(), GPSService.class);
-                    getContext().stopService(endService);
+                    getActivity().stopService(endService);
                     Toast.makeText(getContext(), "Lesson Ended!", Toast.LENGTH_SHORT).show();
 
                 }
