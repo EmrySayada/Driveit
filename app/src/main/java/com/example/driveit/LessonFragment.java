@@ -86,7 +86,9 @@ public class LessonFragment extends Fragment {
                     mydb.startLesson(currentLesson.getLessonId());
                     Intent go = new Intent(getContext(), GPSService.class);
                     go.putExtra("lessonId", currentLesson.getLessonId());
-                    getActivity().startService(go);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        getActivity().startForegroundService(go);
+                    }
                     Toast.makeText(getContext(), "Lesson Started!", Toast.LENGTH_SHORT).show();
                 }else if(currentStatus.equals("ongoing")){
                     Intent endService = new Intent(getContext(), GPSService.class);

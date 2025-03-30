@@ -65,7 +65,7 @@ public class TeacherActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.CALL_PHONE}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.CALL_PHONE, Manifest.permission.FOREGROUND_SERVICE}, 1);
         init();
         int time = cld.get(Calendar.HOUR_OF_DAY);
         user = mydb.getUserById(sp.getInt("userId", 0));
