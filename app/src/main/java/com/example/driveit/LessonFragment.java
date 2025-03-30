@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -55,7 +56,6 @@ public class LessonFragment extends Fragment {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 2);
-
         currentLesson = mydb.findClosestLesson(sp.getInt("userId", 0));
         if(currentLesson!=null){
             noLessonTv.setVisibility(View.GONE);
@@ -70,6 +70,7 @@ public class LessonFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+            startLessonBtn.setEnabled(true);
         }else{
             lessontimeTv.setVisibility(View.GONE);
             pupilPic.setVisibility(View.GONE);
@@ -77,6 +78,7 @@ public class LessonFragment extends Fragment {
             callPupilBtn.setVisibility(View.GONE);
             noLessonTv.setVisibility(View.VISIBLE);
             pupilPicWrapper.setVisibility(View.INVISIBLE);
+            startLessonBtn.setEnabled(false);
         }
         startLessonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,11 +91,15 @@ public class LessonFragment extends Fragment {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         getActivity().startForegroundService(go);
                     }
+                    startLessonBtn.setText("End");
                     Toast.makeText(getContext(), "Lesson Started!", Toast.LENGTH_SHORT).show();
                 }else if(currentStatus.equals("ongoing")){
                     Intent endService = new Intent(getContext(), GPSService.class);
                     getActivity().stopService(endService);
+                    startLessonBtn.setText("Start");
                     Toast.makeText(getContext(), "Lesson Ended!", Toast.LENGTH_SHORT).show();
+                    Intent go = new Intent(getActivity(), LessonSummeryActivity.class);
+                    startActivity(go);
 
                 }
             }

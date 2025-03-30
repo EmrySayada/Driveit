@@ -42,6 +42,7 @@ public class GPSService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
+        locationArr = new ArrayList<>();
         lessonId = intent.getIntExtra("lessonId",0);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         Log.d("LocationTracking", "Service started");
