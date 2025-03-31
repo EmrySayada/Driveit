@@ -809,4 +809,33 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
         return status;
     }
+
+    public ArrayList<ArrayList<Double>> getRoute(int lessonId){
+        Cursor c;
+        String jsonRoute = "";
+        ArrayList<ArrayList<Double>> routeArr = new ArrayList<>();
+        sqdb = getWritableDatabase();
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)}, null, null, null);
+        int col_id = c.getColumnIndex(LESSON_KEY_ID);
+        int gps_col = c.getColumnIndex(LESSON_GPS);
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            int l_id = c.getInt(col_id);
+            jsonRoute = c.getString(gps_col);
+            c.moveToNext();
+        }
+        sqdb.close();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonRoute);
+            double lat = jsonObject.getDouble("lat");
+            double lon = jsonObject.getDouble("lon");
+            ArrayList<Double> point = new ArrayList<>();
+            point.add(lat);
+            point.add(lon);
+            routeArr.add(point);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return routeArr;
+    }
 }
