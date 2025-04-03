@@ -23,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+
 /**
  * @author Emry Sayada
  * fragment for the lesson appears in the teacher Activity
@@ -98,7 +104,8 @@ public class LessonFragment extends Fragment {
                     getActivity().stopService(endService);
                     startLessonBtn.setText("Start");
                     Toast.makeText(getContext(), "Lesson Ended!", Toast.LENGTH_SHORT).show();
-                    Intent go = new Intent(getActivity(), LessonSummeryActivity.class);
+                    Intent go = new Intent(getActivity(), LessonSummeryTeacherActivity.class);
+                    go.putExtra("lessonId", currentLesson.getLessonId());
                     startActivity(go);
 
                 }
@@ -106,6 +113,8 @@ public class LessonFragment extends Fragment {
         });
         return view;
     }
+
+
 
     /**
      * function that initializes all the elements

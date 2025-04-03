@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -793,6 +796,14 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    public void insertFeedback(int lessonId, String feedback){
+        sqdb = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(LESSON_FEEDBACK, feedback);
+        sqdb.update(LESSON_TABLE_NAME, cv, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)});
+        sqdb.close();
+    }
+
     public String getLessonStatus(int lessonId){
         Cursor c;
         String status = "";
@@ -810,10 +821,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return status;
     }
 
-    public ArrayList<ArrayList<Double>> getRoute(int lessonId){
+    public ArrayList<LatLng> getRoute(int lessonId){
         Cursor c;
         String jsonRoute = "";
-        ArrayList<ArrayList<Double>> routeArr = new ArrayList<>();
+        ArrayList<LatLng> routeArr = new ArrayList<>();
         sqdb = getWritableDatabase();
         c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)}, null, null, null);
         int col_id = c.getColumnIndex(LESSON_KEY_ID);
@@ -826,16 +837,45 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         sqdb.close();
         try {
-            JSONObject jsonObject = new JSONObject(jsonRoute);
-            double lat = jsonObject.getDouble("lat");
-            double lon = jsonObject.getDouble("lon");
-            ArrayList<Double> point = new ArrayList<>();
-            point.add(lat);
-            point.add(lon);
-            routeArr.add(point);
+            JSONArray jsonArray = new JSONArray(jsonRoute);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                double lat = jsonObject.getDouble("lat");
+                double lon = jsonObject.getDouble("lon");
+                LatLng point = new LatLng(lat, lon);
+                routeArr.add(point);
+            }
         } catch (JSONException e){
             e.printStackTrace();
         }
         return routeArr;
+    }
+
+    public Lesson getLesson(int lessonId){
+        Cursor c;
+        Lesson l = null;
+        sqdb = getWritableDatabase();
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)}, null, null, null);
+        int col_id = c.getColumnIndex(LESSON_KEY_ID);
+        int col_student_id = c.getColumnIndex(LESSON_STUDENT_ID);
+        int col_teacher_id = c.getColumnIndex(LESSON_TEACHER_ID);
+        int col_type = c.getColumnIndex(LESSON_TYPE);
+        int col_timestamp = c.getColumnIndex(LESSON_DATE);
+        int col_feedback = c.getColumnIndex(LESSON_FEEDBACK);
+        int col_status = c.getColumnIndex(LESSON_STATUS);
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            int id = c.getInt(col_id);
+            int student_id = c.getInt(col_student_id);
+            int teacher_id = c.getInt(col_teacher_id);
+            String type = c.getString(col_type);
+            String timestamp = c.getString(col_timestamp);
+            String feedback = c.getString(col_feedback);
+            String status = c.getString(col_status);
+            l = new Lesson(id, student_id, teacher_id, type, timestamp, null, feedback, status);
+            c.moveToNext();
+        }
+        sqdb.close();
+        return l;
     }
 }
