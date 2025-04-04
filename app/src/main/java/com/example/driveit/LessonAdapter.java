@@ -1,9 +1,12 @@
 package com.example.driveit;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
     private Context context;
     private int resource;
     String type;
+    int lessonId = 0;
 
     /**
      * constructor for the adapter
@@ -50,6 +54,7 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
         TextView typeTv;
         TextView dateTv;
         TextView timeTv;
+        ImageButton moreInfoButton;
     }
 
     /**
@@ -69,6 +74,7 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
     public View getView(int position, @NonNull android.view.View convertView, @NonNull android.view.ViewGroup parent){
         type=getItem(position).getType();
         String[] date = formatDate(getItem(position).getTimestamp());
+        lessonId=getItem(position).getLessonId();
         ViewHolder holder;
         if(convertView==null){
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -77,6 +83,7 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
             holder.typeTv = convertView.findViewById(R.id.typeTv);
             holder.dateTv = convertView.findViewById(R.id.dateTv);
             holder.timeTv = convertView.findViewById(R.id.timeTv);
+            holder.moreInfoButton = convertView.findViewById(R.id.moreInfoButton);
             convertView.setTag(holder);
         }else{
             holder=(ViewHolder)convertView.getTag();
@@ -84,6 +91,14 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
         holder.typeTv.setText(type);
         holder.dateTv.setText(date[0]);
         holder.timeTv.setText(date[1]);
+        holder.moreInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(getContext(), LessonSummeryActivity.class);
+                go.putExtra("lessonId", lessonId);
+                context.startActivity(go);
+            }
+        });
         return convertView;
     }
 

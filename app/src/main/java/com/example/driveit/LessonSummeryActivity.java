@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -55,7 +56,8 @@ public class LessonSummeryActivity extends AppCompatActivity implements OnMapRea
     public void init(){
         route = new ArrayList<>();
         Intent intent = getIntent();
-        lessonId = intent.getIntExtra("lessonId", 3);
+        lessonId = intent.getIntExtra("lessonId", 0);
+        Toast.makeText(this, ""+lessonId, Toast.LENGTH_SHORT).show();
         mapView = findViewById(R.id.mapView);
         mydb = new DBHelper(this);
         lessonFeedback = findViewById(R.id.lessonFeedback);
