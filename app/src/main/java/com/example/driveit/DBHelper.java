@@ -2,14 +2,12 @@ package com.example.driveit;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -19,12 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.net.IDN;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * @author Emry Sayada
@@ -337,7 +332,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor c;
         ArrayList<Lesson> lessonArr = new ArrayList<>();
         sqdb = getWritableDatabase();
-        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_TEACHER_ID+"=? AND " + LESSON_STATUS+"=?", new String[]{String.valueOf(id), "pending"}, null, null, null);
+        c = sqdb.query(LESSON_TABLE_NAME, null, LESSON_TEACHER_ID+"=? AND " + LESSON_STATUS+"=?", new String[]{String.valueOf(id), Lesson.LESSON_PENDING}, null, null, null);
         int lesson_id_col = c.getColumnIndex(LESSON_KEY_ID);
         int student_id_col = c.getColumnIndex(LESSON_STUDENT_ID);
         int teacher_id_col = c.getColumnIndex(LESSON_TEACHER_ID);
@@ -429,26 +424,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public int searchUserId(String username, String phone){
         Cursor c;
         int s_id=0;
-        User user = null;
         sqdb=getWritableDatabase();
         c=sqdb.query(TABLE_NAME, null, USERNAME+"=? AND "+PHONE+"=?", new String[]{username,phone}, null, null, null);
         int col_id = c.getColumnIndex(KEY_ID);
-        int col1=c.getColumnIndex(USERNAME);
-        int col2=c.getColumnIndex(PASSWORD);
-        int col3=c.getColumnIndex(EMAIL);
-        int col4=c.getColumnIndex(PHONE);
-        int col5=c.getColumnIndex(PICTURE);
-        int col6=c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
         while(!c.isAfterLast()){
             s_id = c.getInt(col_id);
-            String s1 = c.getString(col1);
-            String s2 = c.getString(col2);
-            String s3 = c.getString(col3);
-            String s4 = c.getString(col4);
-            Bitmap image = getPicture(c.getBlob(col5));
-            int s6 = c.getInt(col6);
-            user = new User(s1, s2, s3, s4, image, s6);
             c.moveToNext();
         }
         sqdb.close();
@@ -463,26 +444,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public int searchUserIdByEmail(String email){
         Cursor c;
         int s_id=0;
-        User user = null;
         sqdb=getWritableDatabase();
         c=sqdb.query(TABLE_NAME, null, EMAIL+"=?", new String[]{email}, null, null, null);
         int col_id = c.getColumnIndex(KEY_ID);
-        int col1=c.getColumnIndex(USERNAME);
-        int col2=c.getColumnIndex(PASSWORD);
-        int col3=c.getColumnIndex(EMAIL);
-        int col4=c.getColumnIndex(PHONE);
-        int col5=c.getColumnIndex(PICTURE);
-        int col6=c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
         while(!c.isAfterLast()){
             s_id = c.getInt(col_id);
-            String s1 = c.getString(col1);
-            String s2 = c.getString(col2);
-            String s3 = c.getString(col3);
-            String s4 = c.getString(col4);
-            Bitmap image = getPicture(c.getBlob(col5));
-            int s6 = c.getInt(col6);
-            user = new User(s1, s2, s3, s4, image, s6);
             c.moveToNext();
         }
         sqdb.close();
@@ -499,21 +466,23 @@ public class DBHelper extends SQLiteOpenHelper {
         User user = null;
         sqdb = getWritableDatabase();
         c = sqdb.query(TABLE_NAME, null, KEY_ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
-        int col1=c.getColumnIndex(USERNAME);
-        int col2=c.getColumnIndex(PASSWORD);
-        int col3=c.getColumnIndex(EMAIL);
-        int col4=c.getColumnIndex(PHONE);
-        int col5=c.getColumnIndex(PICTURE);
-        int col6=c.getColumnIndex(ISTEACHER);
+        int col_username=c.getColumnIndex(USERNAME);
+        int col_password =c.getColumnIndex(PASSWORD);
+        int col_email =c.getColumnIndex(EMAIL);
+        int col_phone =c.getColumnIndex(PHONE);
+        int col_picture =c.getColumnIndex(PICTURE);
+        int col_currTeacher = c.getColumnIndex(CURRENTTEACHERID);
+        int col_isteacher =c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
         while(!c.isAfterLast()){
-            String s1 = c.getString(col1);
-            String s2 = c.getString(col2);
-            String s3 = c.getString(col3);
-            String s4 = c.getString(col4);
-            Bitmap image = getPicture(c.getBlob(col5));
-            int s6 = c.getInt(col6);
-            user = new User(s1, s2, s3, s4, image, s6);
+            String username = c.getString(col_username);
+            String password = c.getString(col_password);
+            String email = c.getString(col_email);
+            String phone = c.getString(col_phone);
+            Bitmap image = getPicture(c.getBlob(col_picture));
+            int currTeacherId = c.getInt(col_currTeacher);
+            int isTeacher = c.getInt(col_isteacher);
+            user = new User(username, password, email, phone, image, currTeacherId,isTeacher);
             user.setId(id);
             c.moveToNext();
         }
@@ -531,22 +500,24 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb=getWritableDatabase();
         c=sqdb.query(TABLE_NAME, null, null, null, null, null, null);
         int id_col = c.getColumnIndex(KEY_ID);
-        int col1=c.getColumnIndex(USERNAME);
-        int col2=c.getColumnIndex(PASSWORD);
-        int col3=c.getColumnIndex(EMAIL);
-        int col4=c.getColumnIndex(PHONE);
-        int col5=c.getColumnIndex(PICTURE);
-        int col6 = c.getColumnIndex(ISTEACHER);
+        int col_username=c.getColumnIndex(USERNAME);
+        int col_password=c.getColumnIndex(PASSWORD);
+        int col_email=c.getColumnIndex(EMAIL);
+        int col_phone=c.getColumnIndex(PHONE);
+        int col_image=c.getColumnIndex(PICTURE);
+        int col_currTeacher = c.getColumnIndex(CURRENTTEACHERID);
+        int col_isteacher = c.getColumnIndex(ISTEACHER);
         c.moveToNext();
         while(!c.isAfterLast()){
             int s_id= c.getInt(id_col);
-            String s1 = c.getString(col1);
-            String s2 = c.getString(col2);
-            String s3 = c.getString(col3);
-            String s4 = c.getString(col4);
-            Bitmap image=getPicture(c.getBlob(col5));
-            int s6 = c.getInt(col6);
-            User user = new User(s1,s2,s3,s4,image, s6);
+            String username = c.getString(col_username);
+            String password = c.getString(col_password);
+            String email = c.getString(col_email);
+            String phone = c.getString(col_phone);
+            Bitmap image=getPicture(c.getBlob(col_image));
+            int currentTeacherId = c.getInt(col_currTeacher);
+            int isteacher = c.getInt(col_isteacher);
+            User user = new User(username,password,email,phone,image,currentTeacherId ,isteacher);
             arrUsers.add(user);
             c.moveToNext();
         }
@@ -597,35 +568,18 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public boolean isTeacherInDB(String email, String password){
         Cursor c;
-        User user = null;
         sqdb=getWritableDatabase();
+        int res = 0;
         c=sqdb.query(TABLE_NAME, null, EMAIL+"=? AND "+PASSWORD+"=?", new String[]{email,password}, null, null, null);
-        int col_id = c.getColumnIndex(KEY_ID);
-        int col1=c.getColumnIndex(USERNAME);
-        int col2=c.getColumnIndex(PASSWORD);
-        int col3=c.getColumnIndex(EMAIL);
-        int col4=c.getColumnIndex(PHONE);
-        int col5=c.getColumnIndex(PICTURE);
-        int col6=c.getColumnIndex(ISTEACHER);
         c.moveToFirst();
+        int col_isTeacher = c.getColumnIndex(ISTEACHER);
         while(!c.isAfterLast()){
-            int s_id = c.getInt(col_id);
-            String s1 = c.getString(col1);
-            String s2 = c.getString(col2);
-            String s3 = c.getString(col3);
-            String s4 = c.getString(col4);
-            Bitmap image = getPicture(c.getBlob(col5));
-            int s6 = c.getInt(col6);
-            user = new User(s1, s2, s3, s4, image, s6);
+            int s6 = c.getInt(col_isTeacher);
+            res = s6;
             c.moveToNext();
         }
         sqdb.close();
-        if(user!=null){
-            if(user.getIsTeacher()==1){
-                return true;
-            }
-        }
-        return false;
+        return res == 1;
     }
 
     /**
@@ -729,7 +683,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String s4 = c.getString(col4);
             Bitmap image = getPicture(c.getBlob(col5));
             int s6 = c.getInt(col6);
-            pupil = new User(s1, s2, s3, s4, image, s6);
+            pupil = new User(s1, s2, s3, s4, image, teacherId,s6);
             pupil.setId(s_id);
             pupil.setCurrentTeacherId(teacherId);
             pupils.add(pupil);
@@ -768,10 +722,9 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param lessonId
      */
     public void startLesson(int lessonId){
-        //TODO: find how to get the user gps location, and add it to the database. (find out how to do it in as few calls to the database as possible)
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(LESSON_STATUS, "ongoing");
+        cv.put(LESSON_STATUS, Lesson.LESSON_ONGOING);
         sqdb.update(LESSON_TABLE_NAME, cv, LESSON_KEY_ID+"=?", new String[]{String.valueOf(lessonId)});
         sqdb.close();
     }

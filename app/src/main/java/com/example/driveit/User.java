@@ -33,12 +33,13 @@ public class User implements Serializable {
      * @param image
      * @param isTeacher
      */
-    public User(String username, String password, String email, String phone, Bitmap image, int isTeacher){
+    public User(String username, String password, String email, String phone, Bitmap image, int currentTeacherId ,int isTeacher){
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
         this.image = image;
+        this.currentTeacherId = currentTeacherId;
         this.isTeacher = isTeacher;
     }
 

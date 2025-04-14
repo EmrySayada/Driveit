@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * @author Emry Sayada
- * class the oragnisez the information on a teacher
+ * class the oragnizes the information on a teacher
  */
 public class Teacher extends User {
     private int rating;
@@ -29,7 +29,7 @@ public class Teacher extends User {
      * @param region
      */
     public Teacher(int id, String username, String password, String email, String phone, Bitmap image, int isTeacher, int rating, int exp ,String region) {
-        super(username, password, email, phone, image, isTeacher);
+        super(username, password, email, phone, image, id,isTeacher);
         this.rating = rating;
         this.exp = exp;
         this.region = region;

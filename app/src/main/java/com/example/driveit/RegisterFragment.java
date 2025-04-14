@@ -106,7 +106,7 @@ public class RegisterFragment extends Fragment {
                     if (isTeacherBtn.isChecked()) {
                         isTeacher = 1;
                     }
-                    user = new User(info[0], info[1], info[2], info[3], image, isTeacher);
+                    user = new User(info[0], info[1], info[2], info[3], image, 0,isTeacher);
                     sqdb = mydb.getWritableDatabase();
                     if (!mydb.userExists(user.getEmail(), user.getPassword())){
                         mydb.insert(user);

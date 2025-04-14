@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class AppointLesson extends AppCompatActivity {
     TextView appointLessonHeaderTv, appointLessonTimeTv;
     CalendarView appointLessonCV;
     Button appointLessonTimePickerBtn, approveDetailsBtn;
+    Switch examSwitch;
     DBHelper mydb;
     SQLiteDatabase sqdb;
     String date;
@@ -76,8 +78,12 @@ public class AppointLesson extends AppCompatActivity {
                         String time = "";
                         int mhour = hourOfDay;
                         int mminute = minute;
+                        if (mminute < 10){
+                            time = " " + mhour + ":" + "0" + mminute;
+                        }else{
+                            time = " " + mhour + ":" + mminute;
+                        }
                         int msecond=0;
-                        time = " " + mhour + ":" + mminute;
                         date += time;
                         appointLessonTimeTv.setText(date);
                     }
@@ -88,7 +94,12 @@ public class AppointLesson extends AppCompatActivity {
         approveDetailsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Lesson l = new Lesson(userId, teacherId, "Lesson", date);
+                Lesson l = null;
+                if(examSwitch.isChecked()){
+                    l = new Lesson(userId, teacherId, Lesson.EXAM_LESSON_TYPE, date);
+                }else{
+                    l = new Lesson(userId, teacherId, Lesson.REG_LESSON_TYPE, date);
+                }
                 mydb.insertLesson(l);
                 Toast.makeText(AppointLesson.this, "Lesson created!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -105,6 +116,7 @@ public class AppointLesson extends AppCompatActivity {
         appointLessonTimePickerBtn = findViewById(R.id.appointLessonTimePickerBtn);
         appointLessonTimeTv = findViewById(R.id.appointLessonTimeTv);
         approveDetailsBtn = findViewById(R.id.approveDetailsBtn);
+        examSwitch = findViewById(R.id.examSwitch);
         mydb = new DBHelper(this);
         Intent intent = getIntent();
         userId = intent.getIntExtra("userId", 1);

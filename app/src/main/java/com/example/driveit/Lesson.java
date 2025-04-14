@@ -7,6 +7,12 @@ import java.util.Calendar;
  * This class orgenizes all the information available for a certian lesson
  */
 public class Lesson {
+
+    public static final String REG_LESSON_TYPE = "Lesson";
+    public static final String EXAM_LESSON_TYPE = "Exam";
+    public static final String LESSON_ONGOING = "ongoing";
+    public static final String LESSON_PENDING = "pending";
+    public static final String LESSON_ENDED = "ended";
     private int lessonId;
     private int studentId;
     private int teacherId;
@@ -45,7 +51,7 @@ public class Lesson {
         System.arraycopy(time, 0, res, date.length, time.length);
         return res;
     }
-
+    
     /**
      * constructor for the lesson object
      * @param lessonId

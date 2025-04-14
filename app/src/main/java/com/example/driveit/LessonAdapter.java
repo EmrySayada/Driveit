@@ -22,7 +22,6 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
     private Context context;
     private int resource;
     String type;
-    int lessonId = 0;
 
     /**
      * constructor for the adapter
@@ -74,7 +73,6 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
     public View getView(int position, @NonNull android.view.View convertView, @NonNull android.view.ViewGroup parent){
         type=getItem(position).getType();
         String[] date = formatDate(getItem(position).getTimestamp());
-        lessonId=getItem(position).getLessonId();
         ViewHolder holder;
         if(convertView==null){
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -95,10 +93,13 @@ public class LessonAdapter extends ArrayAdapter<Lesson> {
             @Override
             public void onClick(View v) {
                 Intent go = new Intent(getContext(), LessonSummeryActivity.class);
-                go.putExtra("lessonId", lessonId);
+                go.putExtra("lessonId", getItem(position).getLessonId());
                 context.startActivity(go);
             }
         });
+        if(getItem(position).getStatus().equals(Lesson.LESSON_PENDING) || getItem(position).getStatus().equals(Lesson.LESSON_ONGOING)){
+            holder.moreInfoButton.setEnabled(false);
+        }
         return convertView;
     }
 

@@ -90,7 +90,7 @@ public class LessonFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String currentStatus = mydb.getLessonStatus(currentLesson.getLessonId());
-                if(currentStatus.equals("pending")){
+                if(currentStatus.equals(Lesson.LESSON_PENDING)){
                     mydb.startLesson(currentLesson.getLessonId());
                     Intent go = new Intent(getContext(), GPSService.class);
                     go.putExtra("lessonId", currentLesson.getLessonId());
@@ -99,7 +99,7 @@ public class LessonFragment extends Fragment {
                     }
                     startLessonBtn.setText("End");
                     Toast.makeText(getContext(), "Lesson Started!", Toast.LENGTH_SHORT).show();
-                }else if(currentStatus.equals("ongoing")){
+                }else if(currentStatus.equals(Lesson.LESSON_ONGOING)){
                     Intent endService = new Intent(getContext(), GPSService.class);
                     getActivity().stopService(endService);
                     startLessonBtn.setText("Start");

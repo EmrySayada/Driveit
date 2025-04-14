@@ -2,16 +2,19 @@ package com.example.driveit;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -29,6 +32,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 /**
  * class that holds that pupil activity
@@ -37,12 +41,12 @@ import java.util.Calendar;
 public class PupilActivity extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor editor;
-    Button pupilSignOutBtn;
+    Button callTeacherBtn;
     DBHelper mydb;
     SQLiteDatabase sqdb;
-    ImageView pupilPic;
-    TextView greetingTv, pupilNameTv;
-    User user;
+    ImageView pupilPic, teacherImageView, menuBtn;
+    TextView greetingTv, pupilNameTv, teacherUsernameTv;
+    User user, currTeacher;
     Calendar cld;
     Window window;
     ArrayList<Lesson> arrLesson;
@@ -78,6 +82,7 @@ public class PupilActivity extends AppCompatActivity {
             startActivity(intent);
         }
         user = mydb.getUserById(sp.getInt("userId", 0));
+        currTeacher = mydb.getUserTeacher(sp.getInt("userId", 0));
         int time = cld.get(Calendar.HOUR_OF_DAY);
         if(time < 12 && time > 0){
             greetingTv.setText("Good Morning,");
@@ -88,32 +93,39 @@ public class PupilActivity extends AppCompatActivity {
         }
         pupilNameTv.setText(user.getUsername());
         pupilPic.setImageBitmap(user.getImage());
-        pupilSignOutBtn.setOnClickListener(new View.OnClickListener() {
+        teacherImageView.setImageBitmap(currTeacher.getImage());
+        teacherUsernameTv.setText(currTeacher.getUsername());
+        callTeacherBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editor.putString("email", "");
-                editor.putString("password", "");
-                editor.putBoolean("isConnected", false);
-                editor.putBoolean("isTeacher", false);
-                editor.putInt("userId", 0);
-                editor.commit();
-                finish();
+                String tel = "tel:" + currTeacher.getPhone();
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
+                startActivity(intent);
             }
         });
         setNotificationsForLessons(sp.getInt("userId", 0));
+        menuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuOptions();
+            }
+        });
     }
 
     /**
      * function that initializes all the elements
      */
     public void init(){
-        pupilSignOutBtn = findViewById(R.id.pupilSignOutBtn);
         sp = getSharedPreferences("PREFS_FILE", Context.MODE_PRIVATE);
         mydb = new DBHelper(this);
         editor = sp.edit();
         pupilPic = findViewById(R.id.pupilPic);
         greetingTv = findViewById(R.id.greetingTv);
         pupilNameTv = findViewById(R.id.pupilNameTv);
+        callTeacherBtn = findViewById(R.id.callTeacherBtn);
+        teacherImageView = findViewById(R.id.teacherImageView);
+        teacherUsernameTv = findViewById(R.id.teacherUsernameTv);
+        menuBtn = findViewById(R.id.menuBtn);
         cld = Calendar.getInstance();
         window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.mainColor));
@@ -138,6 +150,7 @@ public class PupilActivity extends AppCompatActivity {
         int id = sp.getInt("userId", 0);
         arrLesson.clear();
         arrLesson = mydb.getAllUserLessons(id);
+        Collections.reverse(arrLesson);
         adapter = new LessonAdapter(this, R.layout.list_lessons, arrLesson);
         lessonsLv.setAdapter(adapter);
     }
@@ -162,6 +175,30 @@ public class PupilActivity extends AppCompatActivity {
             long alarmTime = cld.getTimeInMillis();
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
         }
+    }
+
+    public void menuOptions(){
+        final CharSequence[] options = {"Sign Out", "Credits", "Guide"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if(options[i].equals("Sign Out")){
+                    editor.putString("email", "");
+                    editor.putString("password", "");
+                    editor.putBoolean("isConnected", false);
+                    editor.putBoolean("isTeacher", false);
+                    editor.putInt("userId", 0);
+                    editor.commit();
+                    finish();
+                }else if(options[i].equals("Credits")){
+                    //TODO: create credits activity and transfer the user there
+                }else if(options[i].equals("Guide")){
+                    //TODO: create guide activity and transfer the user there
+                }
+            }
+        });
+        builder.show();
     }
 
 }
