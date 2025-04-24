@@ -1,0 +1,36 @@
+Driveit is an app which helps driving students and teachers organize their lesson and exams.
+The app aims to simplify the communication between the student and the teacher.
+The app contains several activities:
+    1. MainActivity:
+        - shows a webview animation (gif)
+    2. Start Activity:
+        - allows the user to cycle between the login and register fragment
+        login fragment:
+            - username and password inputs
+        register fragment:
+            - username, password, email, phonenumber, photo, and a user type selector
+    3. Teacher Register activity:
+        - if the user had chosen the type of the account as a teacher he'll be redirected to this activity
+        - experience and region input
+    4. Pupil Activity:
+        - shows the user's teacher (is he has one).
+        - shows a list of all past and future lessons.
+        - allows the user to go over the lesson summery.
+    5. Teacher Activity:
+        - contain yet another view pager adapter (3 fragments)
+        Lesson fragment:
+            - a button to start the closest lesson to current time (if it is pending)
+            - a container tat shows the student
+        Request fragment:
+            - shows a list of request from students.
+            - each item allows the teacher to either accept/reject the request or call the student.
+        Pupils fragment:
+            - shows a list of all the teacher's students
+            - each item shows a button from which the teacher can appoint a lesson
+    6. Appoint Lesson Activity:
+        - allows the teacher to select the date and time of a lesson, and choosing whether the lesson is an exam
+    7. Lesson Summery Activity:
+        - shows the gps route of the lesson.
+        - shows the teacher feedback on the lesson.
+    8. Lesson Summery Teacher Activity:
+        - input for the feed back on the lesson.
