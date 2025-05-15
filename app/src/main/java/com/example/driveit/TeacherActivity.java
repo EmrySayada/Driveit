@@ -156,9 +156,11 @@ public class TeacherActivity extends AppCompatActivity {
                     editor.commit();
                     finish();
                 }else if(options[i].equals("Credits")){
-                    //TODO: create credits activity and transfer the user there
+                    Intent go = new Intent(TeacherActivity.this, Credits.class);
+                    startActivity(go);
                 }else if(options[i].equals("Guide")){
-                    //TODO: create guide activity and transfer the user there
+                    Intent go = new Intent(TeacherActivity.this, Guide.class);
+                    startActivity(go);
                 }
             }
         });

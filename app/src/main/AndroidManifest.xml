@@ -33,6 +33,12 @@
         android:theme="@style/Theme.Driveit"
         tools:targetApi="31">
         <activity
+            android:name=".Credits"
+            android:exported="false" />
+        <activity
+            android:name=".Guide"
+            android:exported="false" />
+        <activity
             android:name=".LessonSummeryTeacherActivity"
             android:exported="false" />
         <activity

@@ -91,18 +91,20 @@ public class PupilActivity extends AppCompatActivity {
         }else{
             greetingTv.setText("Good Night,");
         }
+        if(currTeacher!=null){
+            teacherImageView.setImageBitmap(currTeacher.getImage());
+            teacherUsernameTv.setText(currTeacher.getUsername());
+            callTeacherBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String tel = "tel:" + currTeacher.getPhone();
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
+                    startActivity(intent);
+                }
+            });
+        }
         pupilNameTv.setText(user.getUsername());
         pupilPic.setImageBitmap(user.getImage());
-        teacherImageView.setImageBitmap(currTeacher.getImage());
-        teacherUsernameTv.setText(currTeacher.getUsername());
-        callTeacherBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tel = "tel:" + currTeacher.getPhone();
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(tel));
-                startActivity(intent);
-            }
-        });
         setNotificationsForLessons(sp.getInt("userId", 0));
         menuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,9 +194,11 @@ public class PupilActivity extends AppCompatActivity {
                     editor.commit();
                     finish();
                 }else if(options[i].equals("Credits")){
-                    //TODO: create credits activity and transfer the user there
+                    Intent go = new Intent(PupilActivity.this, Credits.class);
+                    startActivity(go);
                 }else if(options[i].equals("Guide")){
-                    //TODO: create guide activity and transfer the user there
+                    Intent go = new Intent(PupilActivity.this, Guide.class);
+                    startActivity(go);
                 }
             }
         });

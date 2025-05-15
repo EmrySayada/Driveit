@@ -1,5 +1,6 @@
 package com.example.driveit;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -49,6 +51,14 @@ public class ChooseTeacher extends AppCompatActivity {
         });
         init();
         createListOfTeachers();
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent go = new Intent(ChooseTeacher.this, PupilActivity.class);
+                go.putExtra("key", "back");
+                startActivity(go);
+            }
+        });
 
     }
 
