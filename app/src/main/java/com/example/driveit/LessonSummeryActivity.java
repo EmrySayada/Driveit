@@ -25,6 +25,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+/**
+ * @author Emry Sayada
+ * class that holds all the code for the lesson summery activity
+ */
 public class LessonSummeryActivity extends AppCompatActivity implements OnMapReadyCallback {
     MapView mapView;
     GoogleMap gmap;
@@ -35,7 +39,13 @@ public class LessonSummeryActivity extends AppCompatActivity implements OnMapRea
     TextView lessonFeedback;
     Lesson currentLesson;
 
-
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +63,9 @@ public class LessonSummeryActivity extends AppCompatActivity implements OnMapRea
         lessonFeedback.setText(currentLesson.getFeedback());
     }
 
+    /**
+     * function that initializes all the elements
+     */
     public void init(){
         route = new ArrayList<>();
         Intent intent = getIntent();
@@ -64,48 +77,74 @@ public class LessonSummeryActivity extends AppCompatActivity implements OnMapRea
         currentLesson = mydb.getLesson(lessonId);
     }
 
+    /**
+     * function that runs on the start of the map view
+     */
     @Override
     protected void onStart(){
         super.onStart();
         mapView.onStart();
     }
 
+    /**
+     * function that is called when the map stops
+     */
     @Override
     protected void onStop(){
         super.onStop();
         mapView.onStop();
     }
 
+    /**
+     * function that is called when the map is destroyed
+     */
     @Override
     protected void onDestroy(){
         super.onDestroy();
         mapView.onDestroy();
     }
 
+    /**
+     * function that is called when there is low memory left
+     */
     @Override
     public void onLowMemory(){
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
+    /**
+     * function that is called when the map is paused
+     */
     @Override
     protected void onPause(){
         super.onPause();
         mapView.onPause();
     }
 
+    /**
+     * function that is called when the map is resumed
+     */
     @Override
     protected void onResume(){
         super.onResume();
         mapView.onResume();
     }
 
+    /**
+     * function that is called when the map is ready to be displayed
+     * @param googleMap
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gmap = googleMap;
         drawRoute(route);
     }
 
+    /**
+     * function that draws the route to the map based on given points
+     * @param route
+     */
     public void drawRoute(ArrayList<LatLng> route){
         if(route.isEmpty()) return;
         PolylineOptions polylineOptions = new PolylineOptions().addAll(route).width(10).color(0xFF2196F3);

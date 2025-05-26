@@ -25,10 +25,6 @@ public class Start extends AppCompatActivity {
 //    FrameLayout fl;
     ViewPager2 vp2;
     ViewPagerAdapter adapter;
-
-    LoginFragment loginFragment;
-    RegisterFragment registerFragment;
-
     /**
      * function that creates the activity
      * @param savedInstanceState If the activity is being re-initialized after

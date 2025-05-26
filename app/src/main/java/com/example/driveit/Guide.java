@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * @author Emry Sayada
+ * class that holds all the code for the guide activity
+ */
 public class Guide extends AppCompatActivity {
     InputStreamReader isr;
     InputStream is;
@@ -21,6 +25,13 @@ public class Guide extends AppCompatActivity {
     String guide;
     TextView guideTxt;
 
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +47,17 @@ public class Guide extends AppCompatActivity {
         guideTxt.setText(guide);
     }
 
+    /**
+     * function that initializes all the elements of the screen
+     */
     public void init(){
         guideTxt = findViewById(R.id.guideTxt);
         guide= "";
     }
+
+    /**
+     * function that read the contents of a file
+     */
     public void goReadFromFile(){
         is=this.getResources().openRawResource(R.raw.guide);
         isr=new InputStreamReader(is);

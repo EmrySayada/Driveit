@@ -68,6 +68,9 @@ public class TeacherActivity extends AppCompatActivity {
             return insets;
         });
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.CALL_PHONE, Manifest.permission.FOREGROUND_SERVICE}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 2);
         init();
         int time = cld.get(Calendar.HOUR_OF_DAY);
         user = mydb.getUserById(sp.getInt("userId", 0));
@@ -141,6 +144,9 @@ public class TeacherActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * function that creates the functionality of the menu
+     */
     public void menuOptions(){
         final CharSequence[] options = {"Sign Out", "Credits", "Guide"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -17,7 +17,7 @@ The app contains several activities:
         - shows a list of all past and future lessons.
         - allows the user to go over the lesson summery.
     5. Teacher Activity:
-        - contain yet another view pager adapter (3 fragments)
+        - contains yet another view pager adapter (3 fragments)
         Lesson fragment:
             - a button to start the closest lesson to current time (if it is pending)
             - a container tat shows the student

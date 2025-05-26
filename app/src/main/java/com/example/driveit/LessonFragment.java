@@ -59,9 +59,7 @@ public class LessonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lesson, container, false);
         init(view);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 2);
+
         currentLesson = mydb.findClosestLesson(sp.getInt("userId", 0));
         if(currentLesson!=null){
             noLessonTv.setVisibility(View.GONE);

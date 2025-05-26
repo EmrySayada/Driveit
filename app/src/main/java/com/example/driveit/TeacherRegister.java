@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 /**
  * @author Emry Sayada
+ * class that holds all the code for the teacher register activity
  */
 public class TeacherRegister extends AppCompatActivity {
 
@@ -69,7 +70,7 @@ public class TeacherRegister extends AppCompatActivity {
         regions.add("Select Region");
         Intent i = getIntent();
         teacher = (Teacher) i.getSerializableExtra("teacher");
-        Toast.makeText(this, teacher.toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, teacher.toString(), Toast.LENGTH_SHORT).show();
         goReadFromFile();
         spRegions.setAdapter(adapRegions);
         spRegions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

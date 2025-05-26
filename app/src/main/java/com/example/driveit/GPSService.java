@@ -25,6 +25,10 @@ import com.google.android.gms.location.Priority;
 
 import java.util.ArrayList;
 
+/**
+ * @author Emry Sayada
+ * class that contains all the code for the gps tracking throughout the lessons
+ */
 public class GPSService extends Service {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
@@ -34,12 +38,33 @@ public class GPSService extends Service {
     public GPSService() {
     }
 
+    /**
+     * function that runs when the gpsservice had been called
+     * @param intent The Intent that was used to bind to this service,
+     * as given to {@link android.content.Context#bindService
+     * Context.bindService}.  Note that any extras that were included with
+     * the Intent at that point will <em>not</em> be seen here.
+     *
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    /**
+     * function that runs when the service had been called
+     * @param intent The Intent supplied to {@link android.content.Context#startService},
+     * as given.  This may be null if the service is being restarted after
+     * its process has gone away, and it had previously returned anything
+     * except {@link #START_STICKY_COMPATIBILITY}.
+     * @param flags Additional data about this start request.
+     * @param startId A unique integer representing this specific request to
+     * start.  Use with {@link #stopSelfResult(int)}.
+     *
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         locationArr = new ArrayList<>();
@@ -51,6 +76,9 @@ public class GPSService extends Service {
         return START_STICKY;
     }
 
+    /**
+     * function that request location updates
+     */
     public void requestLocationUpdates(){
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).setMinUpdateIntervalMillis(2000).build();
         locationCallback = new LocationCallback() {
@@ -78,6 +106,9 @@ public class GPSService extends Service {
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    /**
+     * function that handles the closing of the service
+     */
     @Override
     public void onDestroy(){
         mydb = new DBHelper(this);
@@ -86,6 +117,10 @@ public class GPSService extends Service {
         super.onDestroy();
     }
 
+    /**
+     * function that creates the notification of the location tracking
+     * @return notification
+     */
     private Notification getNotification() {
         String channelId = "location_tracking_channel";
         String channelName = "Location Tracking";

@@ -12,12 +12,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * @author Emry Sayada
+ * class that holds all the code for the lesson summery teacher activity
+ */
 public class LessonSummeryTeacherActivity extends AppCompatActivity {
     EditText feedbackEt;
     Button submitButton;
     DBHelper mydb;
     int lessonId;
 
+    /**
+     * function that creates the activity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +51,9 @@ public class LessonSummeryTeacherActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * function that initializes all the elements
+     */
     public void init(){
         Intent intent = getIntent();
         lessonId = intent.getIntExtra("lessonId", 0);

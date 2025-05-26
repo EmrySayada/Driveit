@@ -749,6 +749,11 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    /**
+     * function that inserts the feedback to the database
+     * @param lessonId
+     * @param feedback
+     */
     public void insertFeedback(int lessonId, String feedback){
         sqdb = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -757,6 +762,11 @@ public class DBHelper extends SQLiteOpenHelper {
         sqdb.close();
     }
 
+    /**
+     * function that gets the lesson status for the database
+     * @param lessonId
+     * @return lesson status
+     */
     public String getLessonStatus(int lessonId){
         Cursor c;
         String status = "";
@@ -774,6 +784,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return status;
     }
 
+    /**
+     * function that gets the route in which the pupil traveled throughout the lesson
+     * @param lessonId
+     * @return array of points
+     */
     public ArrayList<LatLng> getRoute(int lessonId){
         Cursor c;
         String jsonRoute = "";
@@ -804,6 +819,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return routeArr;
     }
 
+    /**
+     * function that gets the lesson based on the id
+     * @param lessonId
+     * @return lesson
+     */
     public Lesson getLesson(int lessonId){
         Cursor c;
         Lesson l = null;

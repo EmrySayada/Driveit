@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * @author Emry Sayada
+ * class that holds all the code for the credits page
+ */
 public class Credits extends AppCompatActivity {
     InputStreamReader isr;
     InputStream is;
@@ -21,6 +25,13 @@ public class Credits extends AppCompatActivity {
     String credits;
     TextView creditsTxt;
 
+    /**
+     * function that creates and initializes all the elements in the page
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +47,17 @@ public class Credits extends AppCompatActivity {
         creditsTxt.setText(credits);
     }
 
+    /**
+     * functio that initializes all the elements in the activity
+     */
     public void init(){
         creditsTxt = findViewById(R.id.creditsTxt);
         credits= "";
     }
+
+    /**
+     * function that reads the contents of a file
+     */
     public void goReadFromFile(){
         is=this.getResources().openRawResource(R.raw.credits);
         isr=new InputStreamReader(is);

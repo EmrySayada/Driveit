@@ -53,7 +53,7 @@ public class PupilActivity extends AppCompatActivity {
     LessonAdapter adapter;
     ListView lessonsLv;
     Context context;
-    String stWhere="", channelID="", channelName="";
+    String channelID="", channelName="";
     NotificationChannel channel;
     NotificationManager manager;
 
@@ -179,6 +179,9 @@ public class PupilActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * function that creates the functionality of the menu
+     */
     public void menuOptions(){
         final CharSequence[] options = {"Sign Out", "Credits", "Guide"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

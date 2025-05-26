@@ -54,9 +54,7 @@ public class ChooseTeacher extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Intent go = new Intent(ChooseTeacher.this, PupilActivity.class);
-                go.putExtra("key", "back");
-                startActivity(go);
+                finish();
             }
         });
 
