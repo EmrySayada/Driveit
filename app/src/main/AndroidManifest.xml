@@ -53,8 +53,8 @@
 
         <receiver
             android:name=".AlarmReceiver"
-            android:enabled="false"
-            android:exported="false" />
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".AppointLesson"

@@ -22,12 +22,12 @@ public class AlarmReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-//        Toast.makeText(context, "Alarm is on!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Alarm is on!", Toast.LENGTH_SHORT).show();
         Intent go = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, go, PendingIntent.FLAG_IMMUTABLE);
-        String channelId = "channel_id";
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+        String channelID = "channel_id";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
                 .setSmallIcon(R.drawable.baseline_car_rental_24)
                 .setVibrate(new long[]{1000,1000,1000,1000,1000})
                 .setContentTitle("Driving lesson!")
